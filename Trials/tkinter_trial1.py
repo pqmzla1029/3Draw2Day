@@ -29,9 +29,9 @@ class Paint(object):
         self.c.grid(row=1, columnspan=5)
 
         self.setup()
-        self.initUI()
+        #self.initUI()
         self.root.mainloop()
-
+    """
     def initUI(self):
       
             
@@ -44,7 +44,7 @@ class Paint(object):
            height=self.img.size[1]+20)
         canvas.create_image(10, 10, anchor=NW, image=self.tatras)
         canvas.pack(fill=BOTH, expand=1)
-        
+    """     
 
     def setup(self):
         self.old_x = None
