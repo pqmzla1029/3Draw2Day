@@ -51,7 +51,7 @@ class Paint(object):
         canvas.pack(fill=BOTH, expand=1)
 
     def draw_rectangle(self):
-        self.create_rectangle(230, 10, 290, 60,outline="#f11", fill="#1f1", width=2)
+        self.c.create_rectangle(230, 120, 290, 170,outline="#f11", width=2)
 
     def setup(self):
         self.old_x = None
