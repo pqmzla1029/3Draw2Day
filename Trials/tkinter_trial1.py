@@ -25,26 +25,33 @@ class Paint(object):
         self.choose_size_button = Scale(self.root, from_=1, to=10, orient=HORIZONTAL)
         self.choose_size_button.grid(row=0, column=4)
 
-        self.c = Canvas(self.root, bg='white', width=600, height=600)
-        self.c.grid(row=1, columnspan=5)
+        self.rectangle_button = Button(self.root, text='rectangle', command=self.draw_rectangle)
+        self.rectangle_button.grid(row=0, column=5)
+        
+        image = ImageTk.PhotoImage(file ="car.jpg")
+        self.c = Canvas(self.root, width=600, height=600)
+        self.c.create_image(10, 10, image = image, anchor = NW)
+        self.c.grid(row=1, columnspan=6)
 
         self.setup()
         #self.initUI()
         self.root.mainloop()
-    """
+
     def initUI(self):
-      
-            
+
+
         self.pack(fill=BOTH, expand=1)
-        
+
         self.img = Image.open("car.jpg")
         self.tatras = ImageTk.PhotoImage(self.img)
 
-        canvas = Canvas(self, width=self.img.size[0]+20, 
+        canvas = Canvas(self, width=self.img.size[0]+20,
            height=self.img.size[1]+20)
         canvas.create_image(10, 10, anchor=NW, image=self.tatras)
         canvas.pack(fill=BOTH, expand=1)
-    """     
+
+    def draw_rectangle(self):
+        self.create_rectangle(230, 10, 290, 60,outline="#f11", fill="#1f1", width=2)
 
     def setup(self):
         self.old_x = None
