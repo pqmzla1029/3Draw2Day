@@ -10,26 +10,26 @@ class Paint(object):
     def __init__(self):
         self.root = Tk()
 
-        self.pen_button = Button(self.root, text='pen', command=self.use_pen)
+        self.pen_button = Button(self.root, text='Select', command=self.use_pen)
         self.pen_button.grid(row=0, column=0)
 
-        self.brush_button = Button(self.root, text='brush', command=self.use_brush)
+        self.brush_button = Button(self.root, text='Add', command=self.use_brush)
         self.brush_button.grid(row=0, column=1)
 
-        self.color_button = Button(self.root, text='color', command=self.choose_color)
+        self.color_button = Button(self.root, text='Delete', command=self.choose_color)
         self.color_button.grid(row=0, column=2)
 
-        self.eraser_button = Button(self.root, text='eraser', command=self.use_eraser)
+        self.eraser_button = Button(self.root, text='Confirm', command=self.use_eraser)
         self.eraser_button.grid(row=0, column=3)
 
         self.choose_size_button = Scale(self.root, from_=1, to=10, orient=HORIZONTAL)
         self.choose_size_button.grid(row=0, column=4)
 
-        self.rectangle_button = Button(self.root, text='rectangle', command=self.draw_rectangle)
+        self.rectangle_button = Button(self.root, text='Bound Auto', command=self.draw_rectangle)
         self.rectangle_button.grid(row=0, column=5)
         
-        image = ImageTk.PhotoImage(file ="car.jpg")
-        self.c = Canvas(self.root, width=600, height=600)
+        image = ImageTk.PhotoImage(file ="maxresdefault.jpg")
+        self.c = Canvas(self.root, width=1000, height=1000)
         self.c.create_image(10, 10, image = image, anchor = NW)
         self.c.grid(row=1, columnspan=6)
 
