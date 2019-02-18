@@ -1,0 +1,9 @@
+Steps:
+
+1. Open a terminal and run the command: roscore
+2. Open a new terminal run the command: rosrun nodelet nodelet standalone velodyne_pointcloud/CloudNodelet
+3. Open a new terminal and navigate to the directory with the sample bag file from the aUToronto team.  Type the following command but do not run it yet: rosbag play <bag_file> --topic /velodyne_packets
+4. Open a new terminal and type the following command but do not run it yet: rosbag record /velodyne_points
+5. Run the command from step 4, then immediately run the command from step 5.  This will create a new bag file with the /velodyneScan messages converted to /PointCloud2 messages
+6. Once done, from one of the terminals, run the following command: rosrun pcl_ros bag_to_pcd <new_bag_file> /velodyne_points /new_folder
+(here, /new_folder is the folder where the .pcd files will be stored)
