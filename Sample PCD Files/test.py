@@ -1,7 +1,11 @@
-import pcl
-p = pcl.PointCloud()
-p.from_file("1547842929.701970000.pcd")
-fil = p.make_statistical_outlier_filter()
-fil.set_mean_k (50)
-fil.set_std_dev_mul_thresh (1.0)
-fil.filter().to_file("inliers.pcd")
+import pypcd
+# also can read from file handles.
+pc = pypcd.PointCloud.from_path('file2.pcd')
+# pc.pc_data has the data as a structured array
+# pc.fields, pc.count, etc have the metadata
+
+# center the x field
+pc.pc_data['x'] -= pc.pc_data['x'].mean()
+
+# save as binary compressed
+pc.save_pcd('bar.pcd', compression='binary_compressed')

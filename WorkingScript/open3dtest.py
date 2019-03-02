@@ -7,7 +7,7 @@ Created on Sun Feb 17 20:21:39 2019
 
 from open3d import *
 
-pcd = read_point_cloud("./test_pcd/1547842929.701970000.pcd")
+pcd = read_point_cloud("file2.pcd")
 #print(pcd.get_max_bound())
 #print(pcd.get_min_bound())
 
