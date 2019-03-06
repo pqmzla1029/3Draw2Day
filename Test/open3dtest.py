@@ -4,12 +4,13 @@ Created on Sun Feb 17 20:21:39 2019
 
 @author: johnp
 """
-
+import tkinter as tk
+from tkinter import filedialog	
 from open3d import *
 from pathlib import Path
 import string
 f = open('Filenames.txt', 'r')
-filenamex=""
+filename="pcd_files/"
 #fileName=f.readline()
 temp = f.read().splitlines()
 '''
@@ -24,14 +25,17 @@ for line in f:
     #    compoundedString=compoundedString+line
 '''
 
+root = tk.Tk()
+filename = filedialog.askopenfilename(parent=root, initialdir="./pcd_files",
+                                    title='Please select a directory')
+
 #allow user to choose option
-choiceopt=1
-filename=str(temp[choiceopt])+".pcd"
+
+#filename=filename+filenameadd+".pcd"
 #fileName.rstrip()
 #fileName=str(filename)
 print(filename)
 
-filename1="file2.pcd"
 
 #compoundedString.replace("\n","")
 pcd = read_point_cloud(filename)
