@@ -7,7 +7,7 @@ Created on Sun Feb 17 20:21:39 2019
 
 from open3d import *
 
-pcd = read_point_cloud("file1.pcd")
+pcd = read_point_cloud("file2.pcd")
 #print(pcd)
  #   print(np.asarray(pcd.points))
 draw_geometries_with_editing([pcd])
