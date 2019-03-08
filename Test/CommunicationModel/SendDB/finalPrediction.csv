@@ -1,0 +1,4 @@
+Crop Name,Crop Rank,Market Rank,Crop Tol,Market Risk,Price Per Kg,Season,CropValue,MarketValue,FinalValue
+Jowar,1,5.0,0.5,0,16.68,Kharif,2.5,0.0,2.18054901157543
+Wheat,2,3.0,0.5,0,55.08,Rabi,2.0,0.0,1.9352484828962215
+Cotton,3,1.0,0.5,0,92.0,Kharif,1.5,0.0,1.615946956836389

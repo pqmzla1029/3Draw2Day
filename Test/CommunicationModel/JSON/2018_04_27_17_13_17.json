@@ -1,0 +1,15 @@
+{
+  "fid": 1555,
+  "disid": "MUM",
+  "faid": [
+    {
+      "rn00": "Rice"
+    },
+    {
+      "rn01": "Wheat"
+    },
+    {
+      "rn02": "Jowar"
+    }
+  ]
+}

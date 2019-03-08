@@ -14,3 +14,7 @@ pcd = read_point_cloud("file2.pcd")
 #print(pcd)
  #   print(np.asarray(pcd.points))
 draw_geometries_with_editing([pcd])
+
+vol = read_selection_polygon_volume("cropped.json")
+chair = vol.crop_point_cloud(pcd)
+draw_geometries([chair])

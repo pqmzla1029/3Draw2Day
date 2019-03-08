@@ -10,7 +10,7 @@ from open3d import *
 if __name__ == "__main__":
 
     print("Load a ply point cloud, print it, and render it")
-    pcd = read_point_cloud("file2.pcd")
+    pcd = read_point_cloud("fragment.ply")
     print(pcd)
     print(np.asarray(pcd.points))
     draw_geometries([pcd])
