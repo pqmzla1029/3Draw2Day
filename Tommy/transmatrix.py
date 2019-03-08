@@ -8,6 +8,7 @@ Tcv = np.matrix('0.0 -1.0 -0.0 0.00;-0.0 0.0 -1.0 -0.45;1.0 0.0 -0.0 -0.64;0.0 0
 def conv2img(points):
 	trans = np.matmul(P,Tcv)
 	img = np.matmul(trans, points)
-	return img
+	img1=img/img[2,:]
+	return img1
 
 
