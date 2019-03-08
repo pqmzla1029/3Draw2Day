@@ -30,9 +30,11 @@ r = myarray1.ndim
 for i in range (0,4):
     for j in range (0,3):
         f.write(str(myarray1[i,j])+' ')
-    f.write('\n')
+    f.write('\b')    
+    f.write('\r\n')
 for i in range (0,4):
     for j in range (0,3):
         f.write(str(myarray2[i,j])+' ')
-    f.write('\n')
+    f.write('\b')   
+    f.write('\r\n')
 f.close() 

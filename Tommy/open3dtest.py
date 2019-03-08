@@ -20,10 +20,10 @@ pcd = read_point_cloud("cropped_1.ply")
 # print(pcd.get_max_bound())
 # print(pcd.get_min_bound())
 
-a = np.loadtxt('bound_data.txt')
+f = open ( 'bound_data.txt' , 'r')
+l = [[int(num) for num in line.split(' ')] for line in f ]
+print(l)
 
-one = [1,1,1,1,1,1,1,1].T
-print(one)
 b = np.append(a,one,axis=0)
 
 print(b)
