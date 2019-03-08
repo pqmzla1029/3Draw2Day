@@ -22,9 +22,8 @@ pcd = read_point_cloud("cropped_1.ply")
 
 a = np.loadtxt('bound_data.txt')
 
-one = [1,1,1,1,1,1,1,1].T
-print(one)
-b = np.append(a,one,axis=0)
+a = np.transpose(np.asmatrix(a))
 
-print(b)
-#x = transmatrix.conv2img(a)
+
+x = transmatrix.conv2img(a)
+print(x)
