@@ -1,4 +1,4 @@
-@@ -1,30 +0,0 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Sun Feb 17 20:21:39 2019
@@ -21,11 +21,14 @@ pcd = read_point_cloud("cropped_1.ply")
 # print(pcd.get_max_bound())
 # print(pcd.get_min_bound())
 
-f = open ( 'bound_data.txt' , 'r')
-l = [[int(num) for num in line.split(' ')] for line in f ]
-print(l)
 
-b = np.append(a,one,axis=0)
+a = np.loadtxt('bound_data.txt')
 
-print(b)
+
+a = np.transpose(np.asmatrix(a))
+
+
+
+x = transmatrix.conv2img(a)
+print(x)
 #x = transmatrix.conv2img(a)
