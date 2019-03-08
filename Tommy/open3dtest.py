@@ -12,14 +12,19 @@ import transmatrix
 pcd = read_point_cloud("cropped_1.ply")
 #print(pcd)
  #   print(np.asarray(pcd.points))
-draw_geometries_with_editing([pcd])
-#print(np.asarray(pcd.points))
-draw_geometries([pcd])
-#np.savetxt("text.csv", np.asarray(pcd.points), delimiter = ',')
-print(pcd.get_max_bound()-pcd.get_min_bound())
-print(pcd.get_max_bound())
-print(pcd.get_min_bound())
+# draw_geometries_with_editing([pcd])
+# #print(np.asarray(pcd.points))
+# draw_geometries([pcd])
+# #np.savetxt("text.csv", np.asarray(pcd.points), delimiter = ',')
+# print(pcd.get_max_bound()-pcd.get_min_bound())
+# print(pcd.get_max_bound())
+# print(pcd.get_min_bound())
 
-ok = np.matrix()
+a = np.loadtxt('bound_data.txt')
 
-x = transmatrix.conv2img(ok)
+one = [1,1,1,1,1,1,1,1].T
+print(one)
+b = np.append(a,one,axis=0)
+
+print(b)
+#x = transmatrix.conv2img(a)
