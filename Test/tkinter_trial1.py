@@ -19,8 +19,18 @@ y_number_values = [930, 972, 972, 930, 930, 1332, 1215 ,1215, 1332, 1332]
 
 # Create a Rectangle patch
 #rect = patches.Rectangle((463,930),(930-463),971,linewidth=1,edgecolor='r',facecolor='none')
-plt.plot(x_number_values, y_number_values, linewidth=3)
+plt.plot(x_number_values, y_number_values, linewidth=3, color='cyan')
+x_number_values = [753,753]
+y_number_values = [972,1215]
+plt.plot(x_number_values, y_number_values, linewidth=3, color='cyan')
 
+x_number_values = [988,988]
+y_number_values = [972,1215]
+plt.plot(x_number_values, y_number_values, linewidth=3, color='cyan')
+
+x_number_values = [851,851]
+y_number_values = [930,1332]
+plt.plot(x_number_values, y_number_values, linewidth=3, color='cyan')
 # Add the patch to the Axes
 #ax.add_patch(rect)
 
