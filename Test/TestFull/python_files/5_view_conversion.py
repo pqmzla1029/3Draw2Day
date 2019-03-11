@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from PIL import Image
 import numpy as np
-
-im = np.array(Image.open('frame0000.jpg'), dtype=np.uint8)
+import os
+print(os.getcwd())
+im = np.array(Image.open('image_files/frame0000.jpg'), dtype=np.uint8)
 
 # Create figure and axes
 fig,ax = plt.subplots(1)
@@ -37,7 +38,7 @@ plt.plot(x_number_values, y_number_values, linewidth=3, color='cyan')
 
 plt.show()
 '''
-a = np.loadtxt('outfile.txt')
+a = np.loadtxt('working_data/bounding_data/image_matrix_bound.txt')
 #print(a)
 x_number_values= np.zeros(5)
 y_number_values= np.zeros(5)

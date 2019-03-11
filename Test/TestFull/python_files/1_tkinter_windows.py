@@ -1,7 +1,9 @@
 from tkinter import Tk, Label, Button, StringVar,filedialog
 #from tkinter import filedialog	
 from open3d import *
-
+import os
+os.chdir("..")
+print(os.getcwd())
 class MyFirstGUI:
     LABEL_TEXT = [
         "Main Screen \n 1. Help \n 2. Welp \n 3. Self",
