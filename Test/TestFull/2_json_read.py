@@ -2,7 +2,7 @@ import json
 import numpy as np
 #import objectpath
 
-with open("cropped_1.json", "r") as wow:
+with open("pcd_fiels/json_crops/cropped_1.json", "r") as wow:
     json_string = json.load(wow)
 #print(json_string["bounding_polygon"])
 
@@ -14,7 +14,7 @@ random_array=json_string["bounding_polygon"]
 myarray2 = np.asarray(random_array)
 #print(myarray[1])
 
-with open("cropped_2.json", "r") as now:
+with open("pcd_fiels/json_crops/cropped_2.json", "r") as now:
     json_string = json.load(now)
 
 random_array=json_string["bounding_polygon"]
