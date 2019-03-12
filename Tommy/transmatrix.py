@@ -11,4 +11,10 @@ def conv2img(points):
 	img1=img/img[2,:]
 	return img1
 
+def img2conv(img1):
+	trans = np.matmul(P,Tcv)
+	img = img1*img1[2,:]
+	points = np.matmul(np.linalg.inv(trans),img)
+	return points
+	
 
