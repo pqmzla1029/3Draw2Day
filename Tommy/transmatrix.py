@@ -13,7 +13,7 @@ def conv2img(points):
 
 def img2conv(img1):
 	trans = np.matmul(P,Tcv)
-	img = img1*img1[2,:]
+	img = np.dot(img1,np.transpose(img1[2,:]))
 	points = np.matmul(np.linalg.inv(trans),img)
 	return points
 	
