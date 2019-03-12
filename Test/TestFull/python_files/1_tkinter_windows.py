@@ -2,11 +2,11 @@ from tkinter import Tk, Label, Button, StringVar,filedialog
 #from tkinter import filedialog	
 from open3d import *
 import os
-os.chdir("..")
-print(os.getcwd())
+#os.chdir("..")
+#print(os.getcwd())
 class MyFirstGUI:
     LABEL_TEXT = [
-        "Main Screen \n 1. Help \n 2. Welp \n 3. Self",
+        "Main Screen \n Help \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit",
         "Actually, this is our second GUI.",
         "We made it more interesting...",
         "...by making this label interactive.",
@@ -14,7 +14,7 @@ class MyFirstGUI:
     ]
     def __init__(self, master):
         self.master = master
-        master.title("A simple GUI")
+        master.title("3D Annotation Tool")
 
         self.label_index = 0
         self.label_text = StringVar()
@@ -26,7 +26,7 @@ class MyFirstGUI:
         self.greet_button = Button(master, text="Open", command=self.greet)
         self.greet_button.pack()
 
-        self.close_button = Button(master, text="Close", command=master.quit)
+        self.close_button = Button(master, text="Proceed", command=master.quit)
         self.close_button.pack()
 
     def greet(self):
