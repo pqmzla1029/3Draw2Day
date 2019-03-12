@@ -6,7 +6,7 @@ import os
 #print(os.getcwd())
 class MyFirstGUI:
     LABEL_TEXT = [
-        "Instructions \n\n 1. Press Z to lock the z-axis \n 2. Press K to lock for cropping \n 3. Draw your 2D bounding box using the mouse \n 4. Press C, then Enter, to save the crop \n 5. Press X to lock the x-axis \n 6. Press to lock for cropping \n 7. Draw your 2D bounding box using the mouse \n 8. Press C, then Enter, to save the crop \n 9. Press Escape \n 10. Press 'Proceed' \n",
+        "Instructions \n\n 1. Press Z to lock the z-axis \n 2. Press K to lock for cropping \n 3. Draw your 2D bounding box using the mouse \n 4. Press C, then Enter, to save the crop \n 5. Press X to lock the x-axis \n 6. Press K to lock for cropping \n 7. Draw your 2D bounding box using the mouse \n 8. Press C, then Enter, to save the crop \n 9. Press Escape \n 10. Press 'Proceed' \n",
         # "Actually, this is our second GUI.",
         # "We made it more interesting...",
         # "...by making this label interactive.",
