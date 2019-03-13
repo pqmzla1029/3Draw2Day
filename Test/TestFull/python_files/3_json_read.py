@@ -29,6 +29,8 @@ maxval=pcd.get_max_bound()
 minval=pcd.get_min_bound()
 myarray1[:,2] = maxval[2]
 myarray2[:,2] = minval[2]
+print(myarray3[0,2])
+print(myarray3[2,2])
 #myarray1[:,2]=myarray3[0,2]
 #myarray2[:,2]=myarray3[2,2]
 #print(myarray1)
