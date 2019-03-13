@@ -1,5 +1,6 @@
 import shutil
 import os
+os.chdir("..")
 print(os.getcwd())
 def moveFiles():
         src1="pcd_files\cropped_1.json"

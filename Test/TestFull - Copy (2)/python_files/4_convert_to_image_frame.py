@@ -10,6 +10,7 @@ from open3d import *
 import numpy as np
 import transmatrix
 import os
+os.chdir("..")
 print(os.getcwd())
 #pcd = read_point_cloud("cropped_1.ply")
 #print(pcd)
