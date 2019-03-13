@@ -3,6 +3,8 @@ import matplotlib.patches as patches
 from PIL import Image
 import numpy as np
 import os
+#os.chdir("..")
+#print(os.getcwd())
 print(os.getcwd())
 im = np.array(Image.open('image_files/frame0000.jpg'), dtype=np.uint8)
 

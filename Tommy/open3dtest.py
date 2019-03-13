@@ -15,18 +15,19 @@ pcd = read_point_cloud("cropped_1.ply")
 # draw_geometries_with_editing([pcd])
 # #print(np.asarray(pcd.points))
 # draw_geometries([pcd])
-# #np.savetxt("text.csv", np.asarray(pcd.points), delimiter = ',')
+np.savetxt("text.csv", np.asarray(pcd.points), delimiter = ',')
 # print(pcd.get_max_bound()-pcd.get_min_bound())
 # print(pcd.get_max_bound())
 # print(pcd.get_min_bound())
+maxval=pcd.get_max_bound()
+minval=pcd.get_min_bound()
+#a = np.loadtxt('bound_data.txt')
 
-a = np.loadtxt('bound_data.txt')
+#a = np.transpose(np.asmatrix(a))
 
-a = np.transpose(np.asmatrix(a))
+#x = transmatrix.conv2img(a)
 
-x = transmatrix.conv2img(a)
-
-y = transmatrix.img2conv(x)
+#y = transmatrix.img2conv(x)
 
 
-print(y)
+print(maxval[2],minval[2])
