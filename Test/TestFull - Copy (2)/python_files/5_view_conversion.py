@@ -3,7 +3,8 @@ import matplotlib.patches as patches
 from PIL import Image
 import numpy as np
 import os
-print(os.getcwd())
+os.chdir("..")
+#print(os.getcwd())
 im = np.array(Image.open('image_files/frame0000.jpg'), dtype=np.uint8)
 
 # Create figure and axes
