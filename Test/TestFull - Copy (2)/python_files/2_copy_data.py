@@ -1,7 +1,21 @@
 import shutil
 import os
+
 os.chdir("..")
 print(os.getcwd())
+
+
+def createDirectory(directory):
+	dirName = directory
+ 
+	try:
+	    # Create target Directory
+	    os.mkdir("working_data\\"+dirName)
+	    print("Directory " , dirName ,  " Created ") 
+	except FileExistsError:
+	    print("Directory " , dirName ,  " already exists")
+
+
 def moveFiles():
         src1="pcd_files\cropped_1.json"
         dst1="working_data\json_crops\cropped_1.json"
@@ -20,6 +34,8 @@ def moveFiles():
         shutil.move(src2,dst2)
 
 def main():
+	directory="frame0001"
+	createDirectory(directory)
 	moveFiles()
 
 main()
