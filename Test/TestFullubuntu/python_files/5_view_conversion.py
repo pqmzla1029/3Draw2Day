@@ -3,7 +3,7 @@ import matplotlib.patches as patches
 from PIL import Image
 import numpy as np
 import os
-#os.chdir("..")
+os.chdir("..")
 #print(os.getcwd())
 print(os.getcwd())
 def plot_total(filename):
