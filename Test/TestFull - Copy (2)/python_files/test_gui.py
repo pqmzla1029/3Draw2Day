@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from PIL import Image
 import numpy as np
+from matplotlib.backends.backend_tkagg import FigureCanvasAgg
+import matplotlib.backends.tkagg as tkagg
+import numpy as np
+import tkinter as tk
 import os
 os.chdir("..")
 
@@ -32,35 +36,48 @@ ax.imshow(im)
 #x = np.linspace(-np.pi*2, np.pi*2, 100)
 #y-values
 #y = np.sin(x)
-a = np.loadtxt('working_data/bounding_data/image_matrix_bound.txt')
-#print(a)
-x_number_values= np.zeros(5)
-y_number_values= np.zeros(5)
-rv=4
-for k in range(0,2):
-    start_val=(k*rv)
-    # List to hold x values.
-    for i in range(start_val,(rv+start_val)+1):
-        j=(i%4)+start_val
-        x_number_values[i-start_val] = a[0,j]
 
-    # List to hold y values.
-    for i in range(start_val,(rv+start_val)+1):
-        j=(i%4)+start_val
-        y_number_values[i-start_val] = a[1,j]
-    #print(x_number_values, y_number_values)
-    # Create a Rectangle patch
-    #rect = patches.Rectangle((463,930),(930-463),971,linewidth=1,edgecolor='r',facecolor='none')
-    plt.plot(x_number_values, y_number_values, linewidth=3, color='blue')
+def set_plot(amp, filename):
+    global figure_w, figure_h, fig
+    a = np.loadtxt("working_data/bounding_data/"+filename+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
+    color_array=["blue","red","green","cyan","orange","pink"]
+    len_a=a.shape
+    #print(len_a[0])
+    for index_item in range(0,len_a[0]):
+            x_number_values= np.zeros(5)
+            y_number_values= np.zeros(5)
+            
+            count=0
+            for i in range(0,5):
+                    x_number_values[i] = a[index_item][count%8]
+                    y_number_values[i] = a[index_item][count%8+1]
+                    count=count+2
+            plt.plot(x_number_values, y_number_values, linewidth=3, color=color_array[index_item])
+            #plt.show()
 
-for i in range(0,4):
-    x_number_values = [a[0,i],a[0,i+4]]
-    y_number_values = [a[1,i],a[1,i+4]]
-    #print(x_number_values, y_number_values)
-    plt.plot(x_number_values, y_number_values, linewidth=3, color='blue')
+            start=count-2
+            count=8
+            for i in range(0,5):
+                    x_number_values[i] = a[index_item,count%8+start]
+                    y_number_values[i] = a[index_item,count%8+1+start]
+                    count=count+2
+            plt.plot(x_number_values, y_number_values, linewidth=3, color=color_array[index_item])
 
-ax.set_title('sin(x)')
-figure_x, figure_y, figure_w, figure_h = fig.bbox.bounds
+            count=0
+            inter=8
+            for i in range(0,4):
+                x_number_values = [a[index_item,count],a[index_item,count+inter]]
+                y_number_values = [a[index_item,count+1],a[index_item,count+1+inter]]
+                #print(x_number_values, y_number_values)
+                plt.plot(x_number_values, y_number_values, linewidth=3, color=color_array[index_item])
+                count=count+2
+
+    ax.set_title(filename+" Plot")
+    figure_x, figure_y, figure_w, figure_h = fig.bbox.bounds
+
+amp = 1
+filename="frame0001"
+set_plot(amp, filename)
 #------------------------------------------------------------------------------------------
 
 sg.ChangeLookAndFeel('GreenTan')
@@ -69,22 +86,49 @@ sg.ChangeLookAndFeel('GreenTan')
 column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri', 18, 'bold'))],
           [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')],
           [sg.OK(pad=((figure_w / 2, 0), 3), size=(6, 2))]]
-   
-layout = [      
-    [sg.Text('3D Annotation Tool', size=(30, 1), font=("Helvetica", 25))],      
-    [sg.Text('Choose A Crop To view', size=(35, 1))],        
+
+column2=[[sg.Text('Choose A Crop To view', size=(35, 1))],        
     [sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
     [sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
     [sg.Multiline(default_text='Enter Comments Here', size=(35, 3)),sg.Submit()],      
-    [sg.Text('_'  * 80)],
-    [sg.InputCombo(('PCD to Image', 'Image to PCD'), size=(20, 3))],     
+    [sg.Text('_'  * 80)]
+    ]
+
+column3 = [
+           [sg.Spin([sz for sz in range (1,5)], initial_value =1, size = (2,1), key = '_spin_'),
+            sg.Text('Amplitude', size = (10, 1), font = ('Calibri', 12, 'bold'))],
+           [sg.InputCombo(['frame0001', 'frame0002'], size = (8, 4), key = '_function_'),
+            sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
+           [sg.ReadButton('Redraw Plot')],
+           [sg.Text('_'  * 80)]
+           ]
+
+column4=[[sg.Column(column2, background_color='#d3dfda')],
+         [sg.Column(column3, background_color='#d3dfda')]]
+   
+layout = [      
+    #[sg.Text('3D Annotation Tool', size=(30, 1), font=("Helvetica", 25)),sg.Column(column1, background_color='#d3dfda')],      
+    [sg.Column(column4, background_color='#d3dfda'),sg.Column(column1, background_color='#d3dfda')],
+    #[sg.InputCombo(('PCD to Image', 'Image to PCD'), size=(20, 3))],     
     [sg.Text('Choose A PCD to Annotate', size=(35, 1)),sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
     [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
      sg.InputText('Default Folder'), sg.FolderBrowse()],      
     [sg.Submit(), sg.Cancel()]      
 ]
 
-window = sg.Window('Mobile Robotics', default_element_size=(40, 1)).Layout(layout)
-#fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
-button, values = window.Read()
-sg.Popup(button, values)
+#window = sg.Window('Mobile Robotics', default_element_size=(40, 1)).Layout(layout)
+window = sg.Window('Matplot in PySimpleGUI', force_toplevel = True).Layout(layout).Finalize()
+fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+#button, values = window.Read()
+#sg.Popup(button, values)
+
+while True:
+    button, value = window.Read()
+    if button == 'Redraw Plot':
+        amp = int(value['_spin_'])
+        function = value['_function_']
+        set_plot(amp,function)
+        fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+        
+    if button is None:   
+        break
