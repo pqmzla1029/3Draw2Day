@@ -1,0 +1,175 @@
+import PySimpleGUI as sg
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from PIL import Image
+import numpy as np
+from matplotlib.backends.backend_tkagg import FigureCanvasAgg
+import matplotlib.backends.tkagg as tkagg
+import numpy as np
+import tkinter as tk
+import os
+import open3d as op3
+
+import copy_data as cpd
+import json_read as jsr
+import convert_to_image_frame as ctif
+
+#os.chdir("..")
+print(os.getcwd())
+
+def draw_figure(canvas, figure, loc = (0,0)):
+
+    figure_canvas_agg = FigureCanvasAgg(figure) 
+    figure_canvas_agg.draw()
+    figure_x, figure_y, figure_w, figure_h = figure.bbox.bounds
+    figure_w, figure_h = int(figure_w), int(figure_h)
+    photo = tk.PhotoImage(master=canvas, width=figure_w, height=figure_h)
+    canvas.create_image(loc[0] + figure_w/2, loc[1] + figure_h/2, image=photo)
+    tkagg.blit(photo, figure_canvas_agg.get_renderer()._renderer, colormode=2)
+    return photo
+
+
+#------------------------------------------------------------------------------------------
+im = np.array(Image.open('image_files/frame0000.jpg'), dtype=np.uint8)
+
+# Create figure and axes
+fig,ax = plt.subplots(1)
+
+# Display the image
+ax.imshow(im)
+#fig = plt.figure()
+#ax = fig.add_subplot(111)
+#x-values
+#x = np.linspace(-np.pi*2, np.pi*2, 100)
+#y-values
+#y = np.sin(x)
+
+def set_plot(amp, filename):
+    global figure_w, figure_h, fig
+    a = np.loadtxt("working_data/bounding_data/"+filename+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
+    color_array=["blue","red","green","cyan","orange","pink"]
+    len_a=a.shape
+    #print(len_a[0])
+    for index_item in range(0,len_a[0]):
+            x_number_values= np.zeros(5)
+            y_number_values= np.zeros(5)
+            
+            count=0
+            for i in range(0,5):
+                    x_number_values[i] = a[index_item][count%8]
+                    y_number_values[i] = a[index_item][count%8+1]
+                    count=count+2
+            plt.plot(x_number_values, y_number_values, linewidth=3, color=color_array[index_item])
+            #plt.show()
+
+            start=count-2
+            count=8
+            for i in range(0,5):
+                    x_number_values[i] = a[index_item,count%8+start]
+                    y_number_values[i] = a[index_item,count%8+1+start]
+                    count=count+2
+            plt.plot(x_number_values, y_number_values, linewidth=3, color=color_array[index_item])
+
+            count=0
+            inter=8
+            for i in range(0,4):
+                x_number_values = [a[index_item,count],a[index_item,count+inter]]
+                y_number_values = [a[index_item,count+1],a[index_item,count+1+inter]]
+                #print(x_number_values, y_number_values)
+                plt.plot(x_number_values, y_number_values, linewidth=3, color=color_array[index_item])
+                count=count+2
+
+    ax.set_title(filename+" Plot")
+    figure_x, figure_y, figure_w, figure_h = fig.bbox.bounds
+
+amp = 1
+filename="frame0001"
+set_plot(amp, filename)
+#------------------------------------------------------------------------------------------
+
+sg.ChangeLookAndFeel('GreenTan')
+i_vid = r'pcd_files\1547842929.701970000.pcd'
+
+column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri', 18, 'bold'))],
+          [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')],
+          [sg.OK(pad=((figure_w / 2, 0), 3), size=(6, 2))]]
+
+column2=[[sg.Text('Choose A Crop To view', size=(35, 1))],        
+    [sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
+    [sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
+    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3)),sg.Submit()],      
+    [sg.ReadButton('Meh')],
+    [sg.Text('_'  * 80)],
+    [sg.Text('File'), sg.In(i_vid,size=(30,1), key='input'),sg.FileBrowse()],
+    [sg.ReadButton('Proceed')],
+    [sg.Text('_'  * 80)]
+    ]
+
+column3 = [
+           [sg.Spin([sz for sz in range (1,5)], initial_value =1, size = (2,1), key = '_spin_'),
+            sg.Text('Amplitude', size = (10, 1), font = ('Calibri', 12, 'bold'))],
+           [sg.InputCombo(['frame0001', 'frame0002'], size = (8, 4), key = '_function_'),
+            sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
+           [sg.ReadButton('Redraw Plot')],
+           [sg.Text('_'  * 80)]
+           ]
+
+column4=[[sg.Column(column2, background_color='#d3dfda')],
+         [sg.Column(column3, background_color='#d3dfda')]]
+   
+layout = [
+    #[sg.Text('3D Annotation Tool', size=(30, 1), font=("Helvetica", 25)),sg.Column(column1, background_color='#d3dfda')],      
+    [sg.Column(column4, background_color='#d3dfda'),sg.Column(column1, background_color='#d3dfda')],
+    #[sg.InputCombo(('PCD to Image', 'Image to PCD'), size=(20, 3))],     
+    [sg.Text('Choose A PCD to Annotate', size=(35, 1)),sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
+    [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
+     sg.InputText('Default Folder'), sg.FolderBrowse()],      
+    [sg.Submit(), sg.Cancel()]      
+]
+
+#window = sg.Window('Mobile Robotics', default_element_size=(40, 1)).Layout(layout)
+window = sg.Window('Matplot in PySimpleGUI', force_toplevel = True).Layout(layout).Finalize()
+fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+#button, values = window.Read()
+#sg.Popup(button, values)
+
+while True:
+    button, value = window.Read()
+    if button == 'Redraw Plot':
+        amp = int(value['_spin_'])
+        function = value['_function_']
+        set_plot(amp,function)
+        fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+
+    if button == 'Redraw Plot':
+        amp = int(value['_spin_'])
+        function = value['_function_']
+        set_plot(amp,function)
+        fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+        #cpd.main()
+        #jsr.main()
+        #ctif.main()
+        #amp = int(value['_spin_'])
+        #function = value['_function_']
+        #set_plot(amp,function)
+        #fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+
+    if button == 'Proceed':
+
+        filename = value['input']
+        pcd = op3.read_point_cloud(filename)
+        print("Open file "+filename)
+        op3.draw_geometries_with_editing([pcd])
+        cpd.main()
+        print("Done 1")
+        jsr.main()
+        print("Done 2")
+        ctif.main()
+        print("Done 3")
+        amp = int(value['_spin_'])
+        function = value['_function_']
+        set_plot(amp,function)
+        fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+        
+    if button is None:   
+        break
