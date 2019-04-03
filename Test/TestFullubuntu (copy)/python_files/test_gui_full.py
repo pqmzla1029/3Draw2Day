@@ -9,10 +9,11 @@ import numpy as np
 import tkinter as tk
 import os
 import open3d as op3
-
+import matplotlib.cm as cm
 import copy_data as cpd
 import json_read as jsr
 import convert_to_image_frame as ctif
+from random import randint
 
 #os.chdir("..")
 print(os.getcwd())
@@ -47,7 +48,12 @@ ax.imshow(im)
 def set_plot(amp, filename):
     global figure_w, figure_h, fig
     a = np.loadtxt("working_data/bounding_data/"+filename+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
-    color_array=["blue","red","green","cyan","orange","pink"]
+    #color_array=["blue","red","green","cyan","orange","pink"]
+    size_of_array=a.shape[0]
+    color_array = cm.rainbow(np.linspace(0, 1, size_of_array))
+
+    #for i in range(10):
+    #	color_array.append('%06X' % randint(0, 0xFFFFFF))
     len_a=a.shape
     #print(len_a[0])
     for index_item in range(0,len_a[0]):
@@ -88,7 +94,8 @@ set_plot(amp, filename)
 #------------------------------------------------------------------------------------------
 
 sg.ChangeLookAndFeel('GreenTan')
-i_vid = r'pcd_files\1547842929.701970000.pcd'
+os.chdir("pcd_files")
+i_vid = r'pcd_files/1547842929.701970000.pcd'
 
 column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri', 18, 'bold'))],
           [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')],
@@ -97,7 +104,7 @@ column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri',
 column2=[[sg.Text('Choose A Crop To view', size=(35, 1))],        
     [sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
     [sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
-    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3)),sg.Submit()],      
+    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key = '_annoname_'),sg.Submit()],      
     [sg.ReadButton('Meh')],
     [sg.Text('_'  * 80)],
     [sg.Text('File'), sg.In(i_vid,size=(30,1), key='input'),sg.FileBrowse()],
@@ -134,6 +141,7 @@ fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 #sg.Popup(button, values)
 
 while True:
+    
     button, value = window.Read()
     if button == 'Redraw Plot':
         amp = int(value['_spin_'])
@@ -155,21 +163,25 @@ while True:
         #fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 
     if button == 'Proceed':
-
+        os.chdir("..")
         filename = value['input']
         pcd = op3.read_point_cloud(filename)
         print("Open file "+filename)
         op3.draw_geometries_with_editing([pcd])
+        annotationname = value['_annoname_'].strip()
+	
         cpd.main()
         print("Done 1")
         jsr.main()
         print("Done 2")
-        ctif.main()
+        ctif.main(annotationname)
         print("Done 3")
         amp = int(value['_spin_'])
         function = value['_function_']
         set_plot(amp,function)
         fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+	
+        os.chdir("pcd_files")
         
     if button is None:   
         break
