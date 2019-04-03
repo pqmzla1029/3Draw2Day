@@ -56,8 +56,8 @@ def write_values(myarray1,myarray2,myarray3):
 		f.write('\r\n')
 	f.close() 
 
-def main():
-	directoryname="frame0001"
+def main(filename):
+	directoryname=filename
 	myarray1,myarray2,myarray3=get_values(directoryname)
 	write_values(myarray1,myarray2,myarray3)
 
