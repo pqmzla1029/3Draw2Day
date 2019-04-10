@@ -30,8 +30,8 @@ def moveFiles(directory):
         shutil.move(src1,dst1)
         #shutil.move(src2,dst2)
 
-def main():
-	directory="frame0001"
+def main(filename):
+	directory=filename
 	createDirectory(directory)
 	moveFiles(directory)
 
