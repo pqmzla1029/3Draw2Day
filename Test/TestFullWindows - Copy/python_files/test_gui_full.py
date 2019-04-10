@@ -97,7 +97,7 @@ column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri',
 column2=[[sg.Text('Choose A Crop To view', size=(35, 1))],        
     [sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
     [sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
-    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3)),sg.Submit()],      
+    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key='_annoname_'),sg.Submit()],      
     [sg.ReadButton('Meh')],
     [sg.Text('_'  * 80)],
     [sg.Text('File'), sg.In(i_vid,size=(30,1), key='input'),sg.FileBrowse()],
@@ -160,9 +160,12 @@ while True:
         pcd = op3.read_point_cloud(filename)
         print("Open file "+filename)
         op3.draw_geometries_with_editing([pcd])
+        
+        annotationname=value['_annoname_']
+        
         cpd.main()
         jsr.main()
-        ctif.main()
+        ctif.main(annotationname)
         amp = int(value['_spin_'])
         function = value['_function_']
         set_plot(amp,function)
