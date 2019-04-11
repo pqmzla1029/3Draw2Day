@@ -15,6 +15,7 @@ import json_read as jsr
 import convert_to_image_frame as ctif
 from random import randint
 
+#global fig
 #os.chdir("..")
 print(os.getcwd())
 
@@ -47,7 +48,7 @@ def set_plot(amp, function):
 
     # Display the image
     ax.imshow(im)
-    global figure_w, figure_h, fig
+    global figure_w, figure_h
     a = np.loadtxt("working_data/bounding_data/"+function+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
     #color_array=["blue","red","green","cyan","orange","pink"]
     size_of_array=a.shape[0]
@@ -88,14 +89,15 @@ def set_plot(amp, function):
 
     ax.set_title(function+" Plot")
     figure_x, figure_y, figure_w, figure_h = fig.bbox.bounds
+    return fig
 
 amp = 1
 function="frame0001"
-set_plot(amp, function)
+fig=set_plot(amp, function)
 #------------------------------------------------------------------------------------------
 
 sg.ChangeLookAndFeel('GreenTan')
-os.chdir("pcd_files")
+#os.chdir("pcd_files")
 i_vid = r'pcd_files/1547842929.701970000.pcd'
 
 column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri', 18, 'bold'))],
@@ -105,10 +107,11 @@ column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri',
 column2=[[sg.Text('Choose A Crop To view', size=(35, 1))],        
     [sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
     [sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
-    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key = '_annoname_'),sg.Submit()],      
+    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key = '_comment_'),sg.Submit()],
+    [sg.InputCombo(['car', 'bike', 'truck','person'], size = (8, 4), key = '_annoname_')],      
     [sg.ReadButton('Meh')],
     [sg.Text('_'  * 80)],
-    [sg.Text('File'), sg.In(i_vid,size=(30,1), key='input'),sg.FileBrowse()],
+    [sg.Text('File'), sg.In(i_vid,size=(30,1), key='input'),sg.FileBrowse('filebrowse')],
     [sg.ReadButton('Proceed')],
     [sg.Text('_'  * 80)]
     ]
@@ -140,17 +143,30 @@ window = sg.Window('Matplot in PySimpleGUI', force_toplevel = True).Layout(layou
 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 #button, values = window.Read()
 #sg.Popup(button, values)
-os.chdir("..")
+def load_view_point(pcd, filename):
+    vis = op3.VisualizerWithEditing()
+    vis.create_window()
+    ctr = vis.get_view_control()
+    param = op3.read_pinhole_camera_parameters(filename)
+    vis.add_geometry(pcd)
+    ctr.convert_from_pinhole_camera_parameters(param)
+    vis.run()
+    vis.destroy_window()
+
+#os.chdir("..")
+
 while True:
     
     button, value = window.Read()
     if button == 'Redraw Plot':
-        
+        print(os.getcwd())
         amp = int(value['_spin_'])
         function = value['_function_']
-        set_plot(amp,function)
+        fig=set_plot(amp,function)
         fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 
+    if button == 'filebrowse':
+    	os.chdir("pcd_files")
 
     if button == 'Proceed':
         os.chdir("..")
@@ -159,7 +175,9 @@ while True:
         function = value['_function_']
         pcd = op3.read_point_cloud(filename)
         print("Open file "+filename)
-        op3.draw_geometries_with_editing([pcd])
+        #op3.draw_geometries_with_editing([pcd])
+        destinationf="working_data/viewpoint/viewpoint.json"
+        load_view_point(pcd,destinationf)
         annotationname = value['_annoname_'].strip()
 	
         cpd.main(function)
