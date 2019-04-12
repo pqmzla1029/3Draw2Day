@@ -39,7 +39,7 @@ def get_values(directoryename):
 	#print(myarray1)
 	return myarray1,myarray2,myarray3
 
-def write_values_convert(myarray1,myarray2,myarray3):
+def write_values(myarray1,myarray2,myarray3):
 	#print(myarray1)
 	f= open("working_data/bounding_data/bound_data.txt","w+")
 	r = myarray1.ndim
@@ -56,23 +56,9 @@ def write_values_convert(myarray1,myarray2,myarray3):
 		f.write('\r\n')
 	f.close() 
 
-def write_values_json(filename,myarray1,myarray2,myarray3):
-	#print(myarray1)
-	f= open("working_data/json_crops/"+filename+".txt","a+")
-	r = myarray1.ndim
-	#print(r)
-	for i in range (0,4):
-		for j in range (0,3):
-			f.write(str(myarray1[i,j])+' ')
-	for i in range (0,4):
-		for j in range (0,3):
-			f.write(str(myarray2[i,j])+' ')
-	f.close() 
-
-def main(filename):
-	directoryname=filename
+def main():
+	directoryname="frame0001"
 	myarray1,myarray2,myarray3=get_values(directoryname)
-	write_values_json(filename,myarray1,myarray2,myarray3)
-	write_values_convert(myarray1,myarray2,myarray3)
+	write_values(myarray1,myarray2,myarray3)
 
 #main()
