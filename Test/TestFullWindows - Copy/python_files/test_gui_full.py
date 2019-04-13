@@ -9,11 +9,13 @@ import numpy as np
 import tkinter as tk
 import os
 import open3d as op3
-
+import matplotlib.cm as cm
 import copy_data as cpd
 import json_read as jsr
 import convert_to_image_frame as ctif
+from random import randint
 
+#global fig
 #os.chdir("..")
 print(os.getcwd())
 
@@ -30,13 +32,7 @@ def draw_figure(canvas, figure, loc = (0,0)):
 
 
 #------------------------------------------------------------------------------------------
-im = np.array(Image.open('image_files/frame0000.jpg'), dtype=np.uint8)
 
-# Create figure and axes
-fig,ax = plt.subplots(1)
-
-# Display the image
-ax.imshow(im)
 #fig = plt.figure()
 #ax = fig.add_subplot(111)
 #x-values
@@ -44,10 +40,22 @@ ax.imshow(im)
 #y-values
 #y = np.sin(x)
 
-def set_plot(amp, filename):
-    global figure_w, figure_h, fig
-    a = np.loadtxt("working_data/bounding_data/"+filename+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
-    color_array=["blue","red","green","cyan","orange","pink"]
+def set_plot(amp, function):
+    im = np.array(Image.open('image_files/'+function+'.jpg'), dtype=np.uint8)
+
+    # Create figure and axes
+    fig,ax = plt.subplots(1)
+
+    # Display the image
+    ax.imshow(im)
+    global figure_w, figure_h
+    a = np.loadtxt("working_data/bounding_data/"+function+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
+    #color_array=["blue","red","green","cyan","orange","pink"]
+    size_of_array=a.shape[0]
+    color_array = cm.rainbow(np.linspace(0, 1, size_of_array))
+
+    #for i in range(10):
+    #	color_array.append('%06X' % randint(0, 0xFFFFFF))
     len_a=a.shape
     #print(len_a[0])
     for index_item in range(0,len_a[0]):
@@ -79,16 +87,18 @@ def set_plot(amp, filename):
                 plt.plot(x_number_values, y_number_values, linewidth=3, color=color_array[index_item])
                 count=count+2
 
-    ax.set_title(filename+" Plot")
+    ax.set_title(function+" Plot")
     figure_x, figure_y, figure_w, figure_h = fig.bbox.bounds
+    return fig
 
 amp = 1
-filename="frame0001"
-set_plot(amp, filename)
+function="frame0001"
+fig=set_plot(amp, function)
 #------------------------------------------------------------------------------------------
 
 sg.ChangeLookAndFeel('GreenTan')
-i_vid = r'pcd_files\1547842929.701970000.pcd'
+#os.chdir("pcd_files")
+i_vid = r'pcd_files/1547842929.701970000.pcd'
 
 column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri', 18, 'bold'))],
           [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')],
@@ -97,10 +107,11 @@ column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri',
 column2=[[sg.Text('Choose A Crop To view', size=(35, 1))],        
     [sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
     [sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
-    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key='_annoname_'),sg.Submit()],      
+    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key = '_comment_'),sg.Submit()],
+    [sg.InputCombo(['car', 'bike', 'truck','person'], size = (8, 4), key = '_annoname_')],      
     [sg.ReadButton('Meh')],
     [sg.Text('_'  * 80)],
-    [sg.Text('File'), sg.In(i_vid,size=(30,1), key='input'),sg.FileBrowse()],
+    [sg.Text('File'), sg.In(i_vid,size=(30,1), key='input'),sg.FileBrowse('filebrowse')],
     [sg.ReadButton('Proceed')],
     [sg.Text('_'  * 80)]
     ]
@@ -108,7 +119,7 @@ column2=[[sg.Text('Choose A Crop To view', size=(35, 1))],
 column3 = [
            [sg.Spin([sz for sz in range (1,5)], initial_value =1, size = (2,1), key = '_spin_'),
             sg.Text('Amplitude', size = (10, 1), font = ('Calibri', 12, 'bold'))],
-           [sg.InputCombo(['frame0001', 'frame0002'], size = (8, 4), key = '_function_'),
+           [sg.InputCombo(['frame0001', 'frame0008'], size = (8, 4), key = '_function_'),
             sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
            [sg.ReadButton('Redraw Plot')],
            [sg.Text('_'  * 80)]
@@ -132,44 +143,54 @@ window = sg.Window('Matplot in PySimpleGUI', force_toplevel = True).Layout(layou
 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 #button, values = window.Read()
 #sg.Popup(button, values)
+def load_view_point(pcd, filename):
+    vis = op3.VisualizerWithEditing()
+    vis.create_window()
+    ctr = vis.get_view_control()
+    param = op3.read_pinhole_camera_parameters(filename)
+    vis.add_geometry(pcd)
+    ctr.convert_from_pinhole_camera_parameters(param)
+    vis.run()
+    vis.destroy_window()
+
+#os.chdir("..")
 
 while True:
+    
     button, value = window.Read()
     if button == 'Redraw Plot':
+        print(os.getcwd())
         amp = int(value['_spin_'])
         function = value['_function_']
-        set_plot(amp,function)
+        fig=set_plot(amp,function)
         fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 
-    if button == 'Redraw Plot':
-        amp = int(value['_spin_'])
-        function = value['_function_']
-        set_plot(amp,function)
-        fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
-        #cpd.main()
-        #jsr.main()
-        #ctif.main()
-        #amp = int(value['_spin_'])
-        #function = value['_function_']
-        #set_plot(amp,function)
-        #fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+    if button == 'filebrowse':
+    	os.chdir("pcd_files")
 
     if button == 'Proceed':
-
+        os.chdir("..")
         filename = value['input']
-        pcd = op3.read_point_cloud(filename)
-        print("Open file "+filename)
-        op3.draw_geometries_with_editing([pcd])
-        
-        annotationname=value['_annoname_']
-        
-        cpd.main()
-        jsr.main()
-        ctif.main(annotationname)
         amp = int(value['_spin_'])
         function = value['_function_']
+        pcd = op3.read_point_cloud(filename)
+        print("Open file "+filename)
+        #op3.draw_geometries_with_editing([pcd])
+        destinationf="working_data/viewpoint/viewpoint.json"
+        load_view_point(pcd,destinationf)
+        annotationname = value['_annoname_'].strip()
+	
+        cpd.main(function)
+        print("Done 1")
+        jsr.main(function)
+        print("Done 2")
+        ctif.main(function,annotationname)
+        print("Done 3")
+        
         set_plot(amp,function)
         fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+	
+        os.chdir("pcd_files")
         
     if button is None:   
         break

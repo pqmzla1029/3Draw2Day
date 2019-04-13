@@ -1,6 +1,1 @@
-python3 python_files/1_tkinter_windows.py
-python3 python_files/2_copy_data.py
-python3 python_files/3_json_read.py
-python3 python_files/4_convert_to_image_frame.py
-python3 python_files/5_view_conversion.py
-pause
+python3 python_files/test_gui_full.py

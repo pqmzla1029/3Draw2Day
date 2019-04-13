@@ -41,8 +41,8 @@ def convert_to_image(filename,annotation_name):
 	
 	#x = transmatrix.conv2img(a)
 
-def main(annotationname):
-	filename="frame0001"
+def main(filename,annotationname):
+	filename=filename
 	annotation_name=annotationname
 	convert_to_image(filename,annotation_name)
 	#print("done")
