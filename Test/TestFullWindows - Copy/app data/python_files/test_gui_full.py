@@ -21,7 +21,7 @@ import tkinter as tk
 import Demo_Floating_Toolbar_Includes_Buttons as dftib
 
 #global fig
-#os.chdir("..")
+os.chdir("..")
 print(os.getcwd())
 
 def draw_figure(canvas, figure, loc = (0,0)):

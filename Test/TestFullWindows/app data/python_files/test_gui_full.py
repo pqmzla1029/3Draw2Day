@@ -15,11 +15,24 @@ import json_read as jsr
 import convert_to_image_frame as ctif
 from random import randint
 import ntpath
+import io
+import base64
+
+orange64 = 'iVBORw0KGgoAAAANSUhEUgAAAiIAAADLCAMAAABkvgh7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURQAAANtvJ99sId5tIt5uI91tJNxuJNxuJttvKN90NN91Ntt3PN52ONx3Otx3PNt4Pdp4Ptx4PepfD+pfEOtgD+piD+tkD+ttD+dnFOdoE+doFOVoFuNqG+JrHOFrHuFsHuRpGORpGuRqGORqGupgEOpiEOpkEOlmEOhnEupoEOpoEupqFettEetsF+tuFOxqFetrGOtsGetvHOxrGOxsGOxtGuxuG+xuHexxFutwH+xxGOxyGOxyGuxxHuBsIOJvJ+NvKORvKONwKeNwKuJxLONyLeJyLuRwKeRwKuRxLOtxIexyIexzJOx0JOx1Ju11KOx2KOx2Kux5Iux4Kux5Le1/LeFyMOFzMuB0NOB1Nux7MOx8MOx8Mu19NO1+NO1+Ntd7RdV8RtN+S9J/TdF/TtV9SNR9Stl5QNl6Qdh6Qth7RK+Tfa+Tfq6Ufr+JZb+JZr+KZ7uMbr6KaL6LaryMbLyNb7yOb7WPdLuNcLqOcLmOcrmPdLOQd7SQdrKReLKRerGSerCTfLCTfrmQde2AN+2AOO2BOu2COu6DPO6EPe6EPsWDV8OFXcOFXsOGXcOGXsaDWMSEWsqCVs+AUM2AUs6CU82CVMqDWMmEWtCAT9CAUMKHYMCIYsCIZMCKZu6FQO6GQe6GQu6HRO6IRe6JRu6KR+6KSO+LSu+MS++MTO+OTe+OTu+OUO+RUu+TVfCNTvCOTvCPUPCQUfCQUvCSU/CRVPCSVPCSVvCUV/CUWPCVWvGWWvGXXPGYXvCWYPGaYfGcYvGcZPKdZvKeZ/GdavKeaPKebfKebvKgavKhbPKibfGibvKjcPGkcfKmdPKiePOod/OpePSpePSqevSrfPSsfPSsfvSqg/SugfWwgvWwhPWyhfWyhvWxi/Wyj/W0ifW2jfa4j/a1kPW2kva2lfW2lvW4kPa6kfa7kva5lvW7lPa8lPW8lve+l/a4mva5nPa6nPa7nva+mPa+mva/nPa8oPa9ovbAm/bAnfXAnvbCofbEo/XGp/bGqPbIqQAAAC/NnaUAAAEAdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wBT9wclAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGHRFWHRTb2Z0d2FyZQBwYWludC5uZXQgNC4xLjFjKpxLAAAJXElEQVR4Xu3de3zVdR3H8Xb9/sJh60LlOTtubdIZEyckSdedMzkdZyRGIePmZdqki8s0KllJmtGCTAXRlUAyrireUeZga2JRkooYRWR0JbXMLsIqZ5fT7/L5nRvj9/md0/fhw/Px/fyHP+D33fb4vPj+LvsxXpMA8IREgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgIFEgJF7Ih1Xf3bVsuu/AYXu+mUrL+u8iqbqIcdErvhme0V8SjQCIpwWe+0nli+k2R5NTolc0jYzqpQBcigV+UDltZ57SQ6JfLqyRRXRyiCIis7u7qAhj8B3Ip1tLdg/pFLR0Z+hOR/JbyIrWxGIZCp289E2Ep+J3HzEFqLKy0qhUJUfeUkZnf8lGnYWX4l0tDfTOg5VEqoJNNTXh6EgmaMLBKuaymmcJFLRSfPO5CuRtgitYisPBehDQUFrqC3O2EtUxRdo4Bn8JHJhlNawlNZh85Aj2JQeiRp9JY08nY9Euk+nFUwq1ECLgww1ZTRaS+R8mnk6PpEF8dTDkNIgLQxiHFdNw7U0d9PU07CJdLw+tRUVpy5Cxo19+bz9lYI+n5cNfdhcjWGZf2jsCTTJcDiUmnBR/HKaewqbSHfqQqSJrkLGvuuctZu3jOgBD1u99B7Fg6a+Vwrrk8kNfRX+0XE2+qg527adsc38M723d01yK3lbqhH1SZp7CpfIolnJw4udQk44ddPOn/3q6b+M6K8+/c2vF+jXVw29X/ALI7N+Z3jome+f/QZ7pOG6VCMtl9Dkk7hElifvd0uPs1cb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'
+
 
 #global fig
 #os.chdir("..")
 os.chdir("..")
 print(os.getcwd())
+def image_file_to_bytes(image64, size):
+    image_file = io.BytesIO(base64.b64decode(image64))
+    img = Image.open(image_file)
+    img.thumbnail(size, Image.ANTIALIAS)
+    bio = io.BytesIO()
+    img.save(bio, format='PNG')
+    imgbytes = bio.getvalue()
+    return imgbytes
 
 def draw_figure(canvas, figure, loc = (0,0)):
 
@@ -97,20 +110,27 @@ amp = 1
 function="frame0001"
 fig=set_plot(amp, function)
 #------------------------------------------------------------------------------------------
-
-sg.ChangeLookAndFeel('GreenTan')
+bcolor = ('#F0F8FF', '#F0F8FF')
+wcolor = ('#F0F8FF', '#F0F8FF')
+#sg.ChangeLookAndFeel('GreenTan')
+sg.ChangeLookAndFeel('#F0F8FF')
+#sg.ChangeLookAndFeel('SandyBeach')
+sg.SetOptions (font =('Calibri',12,'bold')) 
 #os.chdir("pcd_files")
 i_vid = r'pcd_files/1547842929.701970000.pcd'
 menu_def = [['&File', ['&Open', '&Save', '&Properties', 'E&xit' ]],
                 ['&Edit', ['&Paste', ['Special', 'Normal',], 'Undo'],],
                 ['&Toolbar', ['---', 'Command &1', 'Command &2', '---', 'Command &3', 'Command &4']],
-                ['&Help', '&About...'],]
+                ['&Help', ['&View Help', '&About']],]
 
-column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri', 18, 'bold'))],
+column1 = [[sg.Text('Camera Display', font = ('Calibri', 18, 'bold'), pad=(250, 15))],
           [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')],
           [sg.OK(pad=((figure_w / 2, 0), 3), size=(6, 2))]]
-
-column2=[[sg.Text('Choose A Crop To view', size=(35, 1))],        
+dirname="Executable Requirements/Logo/pencil-icon.png"
+pathname = os.path.join(dirname ,'3Draw2Day.png') 
+column2=[
+    [sg.Image(dirname,size=(60,60), background_color='#F0F8FF'),sg.Text('       3Draw2Day       ', background_color='#F0F8FF', font = ('Calibri', 16, 'bold'))],
+    [sg.Text('Choose A Crop To view', size=(35, 1))],        
     [sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
     [sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
     [sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key = '_comment_'),sg.Submit()],
@@ -118,6 +138,7 @@ column2=[[sg.Text('Choose A Crop To view', size=(35, 1))],
     [sg.ReadButton('Meh')],
     [sg.Text('_'  * 80)],
     [sg.Text('File'), sg.In(i_vid,size=(30,1), key='input'),sg.FileBrowse('_filebrowse_')],
+    #[sg.Button('Exit', image_data=image_file_to_bytes(orange64, (100,50)), font='Any 15', pad=(0,0), key='Proceed'),],
     [sg.ReadButton('Proceed')],
     [sg.Text('_'  * 80)]
     ]
@@ -131,23 +152,25 @@ column3 = [
            [sg.Text('_'  * 80)]
            ]
 
-column4=[[sg.Column(column2, background_color='#d3dfda')],
-         [sg.Column(column3, background_color='#d3dfda')]]
+column4=[[sg.Column(column2, background_color='#F0F8FF')],
+         [sg.Column(column3, background_color='#F0F8FF')]]
+#add  file name for image
    
 layout = [
+    
     [sg.Menu(menu_def, tearoff=False, pad=(20,1))],
     #[sg.Text('3D Annotation Tool', size=(30, 1), font=("Helvetica", 25)),sg.Column(column1, background_color='#d3dfda')],      
-    [sg.Column(column4, background_color='#d3dfda'),sg.Column(column1, background_color='#d3dfda')],
+    [sg.Column(column4, background_color='#F0F8FF',),sg.Column(column1, background_color='#d3dfda')],
     #[sg.InputCombo(('PCD to Image', 'Image to PCD'), size=(20, 3))],     
-    [sg.Text('Choose A PCD to Annotate', size=(35, 1)),sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
+    [sg.Text('Choose A PCD to Annotate', size=(35, 1))],#sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
     [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
      sg.InputText('Default Folder'), sg.FolderBrowse()],      
     [sg.Submit(), sg.Cancel()],
     [sg.Text('Status Bar', relief=sg.RELIEF_SUNKEN, size=(55,1),  pad=(0,3),key='_status_')]
 ]
-
+dirname="Executable Requirements/Logo/pencil-icon.ico"
 #window = sg.Window('Mobile Robotics', default_element_size=(40, 1)).Layout(layout)
-window = sg.Window('Matplot in PySimpleGUI', force_toplevel = True).Layout(layout).Finalize()
+window = sg.Window('3Draw2Day', force_toplevel = True,icon=dirname).Layout(layout).Finalize()
 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 #button, values = window.Read()
 #sg.Popup(button, values)
@@ -209,5 +232,14 @@ while True:
 	
         os.chdir("pcd_files")
         
+    if button == 'View Help':
+            #window.Disappear()
+            sg.Popup('Help  ',' 1. Z - Lock in z-axis ',' 2. K - Lock for cropping ',' 3. Draw Bounding Box ',' 4. C - Save(Enter) ',' X - Lock in x-axis ',' 2. K - Lock for cropping ',' 3. Draw Bounding Box ',' 4. C - Save(Enter) ',' Q - Quit', grab_anywhere=True)
+            #window.Reappear()
+            
+    if button == 'About':
+            #window.Disappear()
+            sg.Popup('About this program','Version 1.0', 'PySimpleGUI rocks...', grab_anywhere=True)
+            #window.Reappear()
     if button is None:   
         break
