@@ -233,40 +233,41 @@ while True:
         directoryname = filedialog.askopenfilename(parent=root, initialdir="./pcd_files", title='Please select a directory')
         filename=ntpath.basename(directoryname)
         print(filename)
-        
-        #directoryname = value['input']
-        
-        #filename=filename.replace('.pcd', '')
-        #print(filename)
-        df1=df
-        print(df[0][0])
-        df1.set_index(0, inplace=True)
-        df1=df.loc[filename, : ]
-        function=df1[1]
-        print(function)
-        filename=filename.replace('.pcd', '')
-        function=function.replace('.jpg', '')
-        #amp = int(value['_spin_'])
-        #function = value['_function_']
-        pcd = op3.read_point_cloud(directoryname)
-        print("Open file "+filename)
-        exists = os.path.isfile("cropped_1.ply")
-        if exists:
-            #op3.draw_geometries_with_editing([pcd])
+        if(filename!=""):
+            #directoryname = value['input']
+            
+            #filename=filename.replace('.pcd', '')
+            #print(filename)
+            df1=df
+            print(df[0][0])
+            df1.set_index(0, inplace=True)
+            df1=df.loc[filename, : ]
+            function=df1[1]
+            print(function)
+            filename=filename.replace('.pcd', '')
+            function=function.replace('.jpg', '')
+            #amp = int(value['_spin_'])
+            #function = value['_function_']
+            pcd = op3.read_point_cloud(directoryname)
+            print("Open file "+filename)
             destinationf="working_data/viewpoint/viewpoint.json"
             load_view_point(pcd,destinationf)
-            print("Done cutting")
-            annotationname = value['_annoname_'].strip()
-            
-            cpd.main(filename)
-            print("Done 1")
-            jsr.main(filename,annotationname)
-            print("Done 2")
-            ctif.main(function,annotationname)
-            print("Done 3")
-            
-            set_plot(amp,function)
-            fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+            exists = os.path.isfile("cropped_1.ply")
+            if exists:
+                #op3.draw_geometries_with_editing([pcd])
+                
+                print("Done cutting")
+                annotationname = value['_annoname_'].strip()
+                
+                cpd.main(filename)
+                print("Done 1")
+                jsr.main(filename,annotationname)
+                print("Done 2")
+                ctif.main(function,annotationname)
+                print("Done 3")
+                
+                set_plot(amp,function)
+                fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 	
         os.chdir("pcd_files")
         
