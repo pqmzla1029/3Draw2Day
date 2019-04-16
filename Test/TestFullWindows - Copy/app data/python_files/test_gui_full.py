@@ -60,7 +60,7 @@ def set_plot(amp, function):
     im = np.array(Image.open('image_files/'+function+'.jpg'), dtype=np.uint8)
 
     # Create figure and axes
-    fig,ax = plt.subplots(1)
+    fig,ax = plt.subplots(1,figsize=(7.5,6))#,figsize=(20,10))
 
     # Display the image
     ax.imshow(im)
@@ -127,16 +127,15 @@ sg.ChangeLookAndFeel('#F0F8FF')
 #os.chdir("pcd_files")
 i_vid = r'pcd_files/1547842929.701970000.pcd'
 menu_def = [['&File', ['&Open', '&Save', '&Properties', 'E&xit' ]],
-                ['&Edit', ['&Paste', ['Special', 'Normal',], 'Undo'],],
-                ['&Toolbar', ['---', 'Command &1', 'Command &2', '---', 'Command &3', 'Command &4']],
+                #['&Edit', ['&Paste', ['Special', 'Normal',], 'Undo'],],
+                #['&Toolbar', ['---', 'Command &1', 'Command &2', '---', 'Command &3', 'Command &4']],
                 ['&Help', ['&View Help', '&About']],]
 
 column1 = [[sg.Text('Camera Display', font = ('Calibri', 18, 'bold'), background_color='#F0F8FF', pad=(250, 15))],
           [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')],#,
-          [sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color='#F0F8FF', pad=(250, 15))],
+          [sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color='#F0F8FF', pad=(250, 15)),sg.ReadButton('Redraw Plot')]
             #sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
-           [sg.ReadButton('Redraw Plot')],
-           [sg.Text('_'  * 40,background_color='#F0F8FF')]
+           #[sg.Text('_'  * 40,background_color='#F0F8FF')]
            ]
           
 dirname="Executable Requirements/Logo/pencil-icon.png"
@@ -161,9 +160,7 @@ column2=[
 column3 = [
            #[sg.Spin([sz for sz in range (1,5)], initial_value =1, size = (2,1), key = '_spin_'),
             #sg.Text('Amplitude', size = (10, 1), font = ('Calibri', 12, 'bold'))],
-           [sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color='#F0F8FF', pad=(250, 15))],
-            #sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
-           [sg.ReadButton('Redraw Plot')],
+           [sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color='#F0F8FF', pad=(250, 15)),sg.ReadButton('Redraw Plot')],
            [sg.Text('_'  * 40,background_color='#F0F8FF')]
            ]
 
@@ -187,7 +184,7 @@ layout = [
 ]
 dirname="Executable Requirements/Logo/pencil-icon.ico"
 #window = sg.Window('Mobile Robotics', default_element_size=(40, 1)).Layout(layout)
-window = sg.Window('3Draw2Day', force_toplevel = True,icon=dirname).Layout(layout).Finalize()
+window = sg.Window('3Draw2Day', force_toplevel = True,icon=dirname, return_keyboard_events=True, use_default_focus=True).Layout(layout).Finalize()
 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 #button, values = window.Read()
 #sg.Popup(button, values)
@@ -207,9 +204,9 @@ os.chdir("pcd_files")
 print(os.getcwd())
 
 while True:
-    print("trial")
+    #print("trial")
     amp=5
-    button, value = window.Read()
+    button, value = window.Read()#(timeout=0)
     if button == 'Redraw Plot':
         print(os.getcwd())
         currentloc=os.getcwd()
@@ -284,5 +281,9 @@ while True:
             #window.Disappear()
             sg.Popup('About this program','Version 1.0', 'PySimpleGUI rocks...', grab_anywhere=True)
             #window.Reappear()
+    """
+    if button is not sg.TIMEOUT_KEY:
+        print("wow")
+    """   
     if button is None:   
         break
