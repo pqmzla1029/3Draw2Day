@@ -71,9 +71,9 @@ def write_values_json(filename,myarray1,myarray2,myarray3):
 	f.write("\n")
 	f.close() 
 
-def main(filename):
+def main(filename,annotation_name):
 	directoryname=filename
-	myarray1,myarray2,myarray3=get_values(directoryname)
+	myarray1,myarray2,myarray3=get_values(directoryname,annotation_name)
 	write_values_json(filename,myarray1,myarray2,myarray3)
 	write_values_convert(myarray1,myarray2,myarray3)
 
