@@ -74,7 +74,7 @@ def write_values_json(filename,myarray1,myarray2,myarray3,annotation_name):
 def main(filename,annotation_name):
 	directoryname=filename
 	myarray1,myarray2,myarray3=get_values(directoryname)
-	write_values_json(filename,myarray1,myarray2,myarray3)
-	write_values_convert(myarray1,myarray2,myarray3,annotation_name)
+	write_values_json(filename,myarray1,myarray2,myarray3,annotation_name)
+	write_values_convert(myarray1,myarray2,myarray3)
 
 #main()
