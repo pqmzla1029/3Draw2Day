@@ -87,7 +87,6 @@ def set_plot(amp, function):
                 
                 count=0
                 for i in range(0,5):
-                        print(index_item,i)
                         x_number_values[i] = a[index_item][count%8]
                         y_number_values[i] = a[index_item][count%8+1]
                         count=count+2
@@ -241,13 +240,12 @@ while True:
         print(filename)
         if(filename!=""):
             #directoryname = value['input']
-            
             #filename=filename.replace('.pcd', '')
             #print(filename)
+            df=pd.read_csv('working_data/links/PCD-ImageMatches.txt', sep=",", header=None)
             df1=df
-            print(df[0][0])
             df1.set_index(0, inplace=True)
-            df1=df.loc[filename, : ]
+            df1=df1.loc[filename, : ]
             function=df1[1]
             print(function)
             filename=filename.replace('.pcd', '')
