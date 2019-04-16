@@ -20,7 +20,7 @@ import pandas as pd
 
 #global fig
 #os.chdir("..")
-#os.chdir("..")
+os.chdir("..")
 print(os.getcwd())
 
 
@@ -44,7 +44,7 @@ def draw_figure(canvas, figure, loc = (0,0)):
 #x = np.linspace(-np.pi*2, np.pi*2, 100)
 #y-values
 #y = np.sin(x)
-
+amp=5
 def set_plot(amp, function):
     im = np.array(Image.open('image_files/'+function+'.jpg'), dtype=np.uint8)
 
@@ -114,35 +114,37 @@ menu_def = [['&File', ['&Open', '&Save', '&Properties', 'E&xit' ]],
                 ['&Help', ['&View Help', '&About']],]
 
 column1 = [[sg.Text('Camera Display', font = ('Calibri', 18, 'bold'), pad=(250, 15))],
-          [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')],
-          [sg.OK(pad=((figure_w / 2, 0), 3), size=(6, 2))]]
+          [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')]]#,
+          #[sg.OK(pad=((figure_w / 2, 0), 3), size=(6, 2))]]
 dirname="Executable Requirements/Logo/pencil-icon.png"
 #pathname = os.path.join(dirname ,'3Draw2Day.png') 
 column2=[
     [sg.Image(dirname,size=(60,60), background_color='#F0F8FF'),sg.Text('       3Draw2Day       ', background_color='#F0F8FF', font = ('Calibri', 16, 'bold'))],
-    [sg.Text('Choose A Crop To view', size=(35, 1))],        
-    [sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
-    [sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
-    [sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key = '_comment_'),sg.Submit()],
+    #[sg.Text('Choose A Crop To view', size=(35, 1))],        
+    #[sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
+    #[sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
+    #[sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key = '_comment_'),sg.Submit()],
     [sg.InputCombo(['car', 'bike', 'truck','person'], size = (8, 4), key = '_annoname_')],      
-    [sg.ReadButton('Meh')],
-    [sg.Text('_'  * 80)],
+    #[sg.ReadButton('Meh')],
+    [sg.Text('_'  * 40)],
     [sg.Text('File'), sg.In(i_vid,size=(30,1), key='input'),sg.FileBrowse('_filebrowse_')],
     #[sg.Button('Exit', image_data=image_file_to_bytes(orange64, (100,50)), font='Any 15', pad=(0,0), key='Proceed'),],
     [sg.ReadButton('Proceed')],
-    [sg.Text('_'  * 80)]
+    [sg.Text('_'  * 40)]
     ]
 
 column3 = [
-           [sg.Spin([sz for sz in range (1,5)], initial_value =1, size = (2,1), key = '_spin_'),
-            sg.Text('Amplitude', size = (10, 1), font = ('Calibri', 12, 'bold'))],
-           [sg.InputCombo(['frame0001', 'frame0008'], size = (8, 4), key = '_function_'),
-            sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
+           #[sg.Spin([sz for sz in range (1,5)], initial_value =1, size = (2,1), key = '_spin_'),
+            #sg.Text('Amplitude', size = (10, 1), font = ('Calibri', 12, 'bold'))],
+           [sg.InputCombo(['frame0001', 'frame0008'], size = (8, 4), key = '_function_')],
+            #sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
            [sg.ReadButton('Redraw Plot')],
-           [sg.Text('_'  * 80)]
+           [sg.Text('_'  * 40)]
            ]
 
-column4=[[sg.Column(column2, background_color='#F0F8FF')],
+#column4=[[sg.Column(column2, background_color='#F0F8FF')],
+#         [sg.Column(column3, background_color='#F0F8FF')]]
+column4=[[sg.Column(column1, background_color='#F0F8FF')],
          [sg.Column(column3, background_color='#F0F8FF')]]
 #add  file name for image
   
@@ -150,12 +152,12 @@ layout = [
     
     [sg.Menu(menu_def, tearoff=False, pad=(20,1))],
     #[sg.Text('3D Annotation Tool', size=(30, 1), font=("Helvetica", 25)),sg.Column(column1, background_color='#d3dfda')],      
-    [sg.Column(column4, background_color='#F0F8FF',),sg.Column(column1, background_color='#d3dfda')],
+    [sg.Column(column2, background_color='#F0F8FF',),sg.Column(column4, background_color='#d3dfda')],
     #[sg.InputCombo(('PCD to Image', 'Image to PCD'), size=(20, 3))],     
-    [sg.Text('Choose A PCD to Annotate', size=(35, 1))],#sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
-    [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
-     sg.InputText('Default Folder'), sg.FolderBrowse()],      
-    [sg.Submit(), sg.Cancel()],
+    #[sg.Text('Choose A PCD to Annotate', size=(35, 1))],#sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
+    #[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
+     #sg.InputText('Default Folder'), sg.FolderBrowse()],      
+    #[sg.Submit(), sg.Cancel()],
     [sg.Text('Status Bar', relief=sg.RELIEF_SUNKEN, size=(55,1),  pad=(0,3),key='_status_')]
 ]
 dirname="Executable Requirements/Logo/pencil-icon.ico"
@@ -180,12 +182,12 @@ os.chdir("pcd_files")
 print(os.getcwd())
 
 while True:
-    
+    amp=5
     button, value = window.Read()
     if button == 'Redraw Plot':
         currentloc=os.getcwd()
         os.chdir("..")
-        amp = int(value['_spin_'])
+        #amp = int(value['_spin_'])
         
         #PCD-ImageMatches
         #function = value['_function_']
@@ -212,7 +214,7 @@ while True:
         print(function)
         filename=filename.replace('.pcd', '')
         function=function.replace('.jpg', '')
-        amp = int(value['_spin_'])
+        #amp = int(value['_spin_'])
         #function = value['_function_']
         pcd = op3.read_point_cloud(directoryname)
         print("Open file "+filename)

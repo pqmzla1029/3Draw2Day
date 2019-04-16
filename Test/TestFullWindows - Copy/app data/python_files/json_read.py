@@ -6,7 +6,7 @@ from open3d import *
 #os.chdir("..")
 print(os.getcwd())
 
-def get_values(directoryename):
+def get_values(directoryename,annotation_name):
 	with open("working_data/json_crops/"+directoryename+"/cropped_1.json", "r") as wow:
 	    json_string = json.load(wow)
 	#print(json_string["bounding_polygon"])
@@ -61,12 +61,14 @@ def write_values_json(filename,myarray1,myarray2,myarray3):
 	f= open("working_data/json_crops/"+filename+".txt","a+")
 	r = myarray1.ndim
 	#print(r)
+	f.write(annotation_name)
 	for i in range (0,4):
 		for j in range (0,3):
-			f.write(str(myarray1[i,j])+' ')
+			f.write(" "+str(myarray1[i,j]))
 	for i in range (0,4):
 		for j in range (0,3):
-			f.write(str(myarray2[i,j])+' ')
+			f.write(" "+str(myarray2[i,j]))
+	f.write("\n")
 	f.close() 
 
 def main(filename):
