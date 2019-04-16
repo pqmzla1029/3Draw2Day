@@ -101,6 +101,10 @@ fig=set_plot(amp, function)
 sg.ChangeLookAndFeel('GreenTan')
 #os.chdir("pcd_files")
 i_vid = r'pcd_files/1547842929.701970000.pcd'
+menu_def = [['&File', ['&Open', '&Save', '&Properties', 'E&xit' ]],
+                ['&Edit', ['&Paste', ['Special', 'Normal',], 'Undo'],],
+                ['&Toolbar', ['---', 'Command &1', 'Command &2', '---', 'Command &3', 'Command &4']],
+                ['&Help', '&About...'],]
 
 column1 = [[sg.Text('Plot Test - PySimpleGUI and Matplotlib', font = ('Calibri', 18, 'bold'))],
           [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')],
@@ -131,13 +135,15 @@ column4=[[sg.Column(column2, background_color='#d3dfda')],
          [sg.Column(column3, background_color='#d3dfda')]]
    
 layout = [
+    [sg.Menu(menu_def, tearoff=False, pad=(20,1))],
     #[sg.Text('3D Annotation Tool', size=(30, 1), font=("Helvetica", 25)),sg.Column(column1, background_color='#d3dfda')],      
     [sg.Column(column4, background_color='#d3dfda'),sg.Column(column1, background_color='#d3dfda')],
     #[sg.InputCombo(('PCD to Image', 'Image to PCD'), size=(20, 3))],     
     [sg.Text('Choose A PCD to Annotate', size=(35, 1)),sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
     [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
      sg.InputText('Default Folder'), sg.FolderBrowse()],      
-    [sg.Submit(), sg.Cancel()]      
+    [sg.Submit(), sg.Cancel()],
+    [sg.Text('Status Bar', relief=sg.RELIEF_SUNKEN, size=(55,1),  pad=(0,3),key='_status_')]
 ]
 
 #window = sg.Window('Mobile Robotics', default_element_size=(40, 1)).Layout(layout)

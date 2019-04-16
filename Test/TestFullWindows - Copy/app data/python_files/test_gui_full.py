@@ -18,6 +18,7 @@ import ntpath
 #import keyboard
 from tkinter import filedialog
 import tkinter as tk
+import Demo_Floating_Toolbar_Includes_Buttons as dftib
 
 #global fig
 #os.chdir("..")
@@ -161,7 +162,7 @@ def load_view_point(pcd, filename):
 #keyboard.add_hotkey('z', lambda: keyboard.press_and_release('k'))
 while True:
     
-
+    #dftib.ShowMeTheButtons()
     button, value = window.Read()
     if button == 'Redraw Plot':
         currentloc=os.getcwd()
@@ -174,6 +175,7 @@ while True:
 
     if button == '_filebrowse_':
         root = tk.Tk()
+        root.withdraw()
         filename = filedialog.askopenfilename(parent=root, initialdir="./pcd_files", title='Please select a directory')
         print(filename)
 
@@ -182,6 +184,7 @@ while True:
 	
         print(os.getcwd())
         root = tk.Tk()
+        root.withdraw()
         directoryname = filedialog.askopenfilename(parent=root, initialdir="./pcd_files", title='Please select a directory')
         filename=directoryname
         print(filename)
