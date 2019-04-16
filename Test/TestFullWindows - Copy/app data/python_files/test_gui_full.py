@@ -67,21 +67,27 @@ def set_plot(amp, function):
     global figure_w, figure_h
     exists = os.path.isfile("working_data/bounding_data/2D/"+function+".txt")
     if exists:
-        a = np.loadtxt("working_data/bounding_data/2D/"+function+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
+        x = np.loadtxt("working_data/bounding_data/2D/"+function+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
         #color_array=["blue","red","green","cyan","orange","pink"]
-        size_of_array=a.shape[0]
+        size_of_array=x.shape[0]
+        a = np.zeros([2,16])
         color_array = cm.rainbow(np.linspace(0, 1, size_of_array))
-
+        len_a=x.shape
+        if x.ndim > 1: a = x
+        else:
+            a[0] = x
+            size_of_array = 1
         #for i in range(10):
         #	color_array.append('%06X' % randint(0, 0xFFFFFF))
-        len_a=a.shape
+        #len_a=a.shape
         #print(len_a[0])
-        for index_item in range(0,len_a[0]):
+        for index_item in range(0,size_of_array):
                 x_number_values= np.zeros(5)
                 y_number_values= np.zeros(5)
                 
                 count=0
                 for i in range(0,5):
+                        print(index_item,i)
                         x_number_values[i] = a[index_item][count%8]
                         y_number_values[i] = a[index_item][count%8+1]
                         count=count+2
