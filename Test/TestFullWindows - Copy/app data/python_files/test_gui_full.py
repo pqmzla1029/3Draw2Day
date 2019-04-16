@@ -65,9 +65,9 @@ def set_plot(amp, function):
     # Display the image
     ax.imshow(im)
     global figure_w, figure_h
-    exists = os.path.isfile("working_data/bounding_data/"+function+".txt")
+    exists = os.path.isfile("working_data/bounding_data/2D/"+function+".txt")
     if exists:
-        a = np.loadtxt("working_data/bounding_data/"+function+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
+        a = np.loadtxt("working_data/bounding_data/2D/"+function+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
         #color_array=["blue","red","green","cyan","orange","pink"]
         size_of_array=a.shape[0]
         color_array = cm.rainbow(np.linspace(0, 1, size_of_array))
@@ -250,21 +250,23 @@ while True:
         #function = value['_function_']
         pcd = op3.read_point_cloud(directoryname)
         print("Open file "+filename)
-        #op3.draw_geometries_with_editing([pcd])
-        destinationf="working_data/viewpoint/viewpoint.json"
-        load_view_point(pcd,destinationf)
-        print("Done cutting")
-        annotationname = value['_annoname_'].strip()
-	
-        cpd.main(filename)
-        print("Done 1")
-        jsr.main(filename,annotationname)
-        print("Done 2")
-        ctif.main(function,annotationname)
-        print("Done 3")
-        
-        set_plot(amp,function)
-        fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+        exists = os.path.isfile("cropped_1.ply")
+        if exists:
+            #op3.draw_geometries_with_editing([pcd])
+            destinationf="working_data/viewpoint/viewpoint.json"
+            load_view_point(pcd,destinationf)
+            print("Done cutting")
+            annotationname = value['_annoname_'].strip()
+            
+            cpd.main(filename)
+            print("Done 1")
+            jsr.main(filename,annotationname)
+            print("Done 2")
+            ctif.main(function,annotationname)
+            print("Done 3")
+            
+            set_plot(amp,function)
+            fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 	
         os.chdir("pcd_files")
         
