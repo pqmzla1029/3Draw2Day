@@ -18,11 +18,19 @@ import pandas as pd
 from tkinter import filedialog
 import tkinter as tk
 
-#global fig
-os.chdir("..")
-print(os.getcwd())
-logodirname="Executable Requirements/Logo/pencil-icon.png"
-global_frame=0
+#---------------------------------------Open3D custom viewpoints----------------------------------------------
+
+def load_view_point(pcd, filename):
+    vis = op3.VisualizerWithEditing()
+    vis.create_window()
+    ctr = vis.get_view_control()
+    param = op3.read_pinhole_camera_parameters(filename)
+    vis.add_geometry(pcd)
+    ctr.convert_from_pinhole_camera_parameters(param)
+    vis.run()
+    vis.destroy_window()
+
+#---------------------------------------PySimpleGUI Add Matplot----------------------------------------------
 
 def draw_figure(canvas, figure, loc = (0,0)):
 
@@ -35,19 +43,9 @@ def draw_figure(canvas, figure, loc = (0,0)):
     tkagg.blit(photo, figure_canvas_agg.get_renderer()._renderer, colormode=2)
     return photo
 
+#---------------------------------------Matlab Plotting Image----------------------------------------------
 
-#------------------------------------------------------------------------------------------
-
-
-df=pd.read_csv('working_data/links/PCD-ImageMatches.txt', sep=",", header=None)
-array_images=df[1]
-size_of_array=array_images.shape[0]
-placeholder_array = ["" for x in range(size_of_array)]
-print(array_images[0])
-for i in range(size_of_array):
-    placeholder_array[i]=array_images[i].replace('.jpg', '')
-
-print(placeholder_array)
+#print(placeholder_array)
 def set_plot( function):
     print(os.getcwd())
     im = np.array(Image.open('image_files/'+function+'.jpg'), dtype=np.uint8)
@@ -104,16 +102,38 @@ def set_plot( function):
     return fig
 
 
+
+#-------------------------------------------Begin--------------------------------------------------
+
+
+#Uncomment Following Line to Begin Debug Process
+#os.chdir("..")
+print(os.getcwd())
+logodirname="Executable Requirements/Logo/pencil-icon.png"
+icondirname="Executable Requirements/Logo/pencil-icon.ico"
+global_frame=0
+
+df=pd.read_csv('working_data/links/PCD-ImageMatches.txt', sep=",", header=None)
+array_images=df[1]
+size_of_array=array_images.shape[0]
+placeholder_array = ["" for x in range(size_of_array)]
+#print(array_images[0])
+for i in range(size_of_array):
+    placeholder_array[i]=array_images[i].replace('.jpg', '')
 function=placeholder_array[0]
 fig=set_plot(function)
-#------------------------------------------------------------------------------------------
+
+
+
+#-----------------------------------GUI Build and Display ------------------------------------------
+
 bcolor = '#F0F8FF'
 wcolor = ('#F0F8FF', '#F0F8FF')
 #sg.ChangeLookAndFeel('GreenTan')
 sg.ChangeLookAndFeel(bcolor)
 #sg.ChangeLookAndFeel('SandyBeach')
 #sg.SetOptions (font =('Calibri',12,'bold'))
-i_vid = r'pcd_files/1547842929.701970000.pcd'
+
 menu_def = [['&File', ['&Open', 'E&xit' ]],
                 #['&Edit', ['&Paste', ['Special', 'Normal',], 'Undo'],],
                 #['&Toolbar', ['---', 'Command &1', 'Command &2', '---', 'Command &3', 'Command &4']],
@@ -121,7 +141,6 @@ menu_def = [['&File', ['&Open', 'E&xit' ]],
 
 column1 = [[sg.Text('Camera Display', font = ('Calibri', 18, 'bold'), background_color='#F0F8FF', pad=(250, 15))],
           [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')]#,
-          
            ]
 
 column2=[
@@ -139,10 +158,10 @@ column3 = [
            ]
 
 column4 = [[sg.Listbox(values=placeholder_array, change_submits=True, size=(28, len(placeholder_array)), key='func')],
-               [sg.T(' ' * 12, background_color=bcolor), sg.Exit(size=(5, 2))]]          
+               [sg.T(' ' * 12, background_color=bcolor), sg.Exit('End',size=(5, 2))]]          
 
-
-extracolumn=[
+#i_vid = r'pcd_files/1547842929.701970000.pcd'
+#extracolumn=[
     #[sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
     #[sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
     #[sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key = '_comment_'),sg.Submit()],
@@ -161,7 +180,7 @@ extracolumn=[
     #[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
     #sg.InputText('Default Folder'), sg.FolderBrowse()],      
     #[sg.Submit(), sg.Cancel()]
-    ]
+    #]
 
 #column5=[[sg.Column(column2, background_color=bcolor)],[sg.Column(column3, background_color=bcolor)]]
 column5=[[sg.Column(column2, background_color=bcolor)],
@@ -172,12 +191,8 @@ layout = [
     
     [sg.Menu(menu_def, tearoff=False, pad=(20,1))],
     [sg.Column(column5, background_color=bcolor,),sg.Column(column1, background_color=bcolor)],
-    
     [sg.Text('Status Bar', relief=sg.RELIEF_SUNKEN, size=(55,1),  pad=(0,3),key='_status_')]
 ]
-
-
-icondirname="Executable Requirements/Logo/pencil-icon.ico"
 #window = sg.Window('Mobile Robotics', default_element_size=(40, 1)).Layout(layout)
 window = sg.Window('3Draw2Day', force_toplevel = True,icon=icondirname, return_keyboard_events=True, use_default_focus=True, grab_anywhere=False).Layout(layout).Finalize()
 window.Finalize()
@@ -185,15 +200,7 @@ fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 #button, values = window.Read()
 #sg.Popup(button, values)
 
-def load_view_point(pcd, filename):
-    vis = op3.VisualizerWithEditing()
-    vis.create_window()
-    ctr = vis.get_view_control()
-    param = op3.read_pinhole_camera_parameters(filename)
-    vis.add_geometry(pcd)
-    ctr.convert_from_pinhole_camera_parameters(param)
-    vis.run()
-    vis.destroy_window()
+#------------------------------------Conditional Check--------------------------------------------------
 
 
 os.chdir("pcd_files")
@@ -203,6 +210,7 @@ while True:
     global_frame=0
     #print("trial")
     button, value = window.Read()#(timeout=0)
+    print(button)
     if button == 'Redraw Plot':
         print(os.getcwd())
         currentloc=os.getcwd()
@@ -216,6 +224,7 @@ while True:
         fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
         #os.chdir(currentloc)
         os.chdir("pcd_files")
+        os.chdir("Wow")
 
     if button == '_filebrowse_':
         root = tk.Tk()
@@ -230,7 +239,8 @@ while True:
         root.withdraw()
         directoryname = filedialog.askopenfilename(parent=root, initialdir="./pcd_files", title='Please select a directory')
         filename=ntpath.basename(directoryname)
-        print(filename)
+        #print(filename)
+        #print("Test Begin")
         if(filename!=""):
             #directoryname = value['input']
             #filename=filename.replace('.pcd', '')
@@ -265,8 +275,9 @@ while True:
                 fig=set_plot(function)
                 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
                 global_frame=1
-                
+        #print("Test End")        
         os.chdir("pcd_files")
+        print(os.getcwd())
 
     
         
@@ -283,22 +294,23 @@ while True:
     if button is not sg.TIMEOUT_KEY:
         print("wow")
     """   
-    if button is None or button is 'Exit':
+    if button is None or button == 'Exit' or button is 'End':
         window.Close()
         break
 
     try:
         if global_frame==0:
+            #print("Refreshing")
             os.chdir("..")
-            
-            #amp = int(value['_spin_'])
-            
-            #PCD-ImageMatches
-            function = value['func'][0]
-            print(function)
-            fig=set_plot(function)
-            fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
-            
+            print(os.getcwd())
+            try:
+                function = value['func'][0]
+                print(function)
+                fig=set_plot(function)
+                fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+            except:
+                pass
             os.chdir("pcd_files")
+            print(os.getcwd())
     except:
         pass
