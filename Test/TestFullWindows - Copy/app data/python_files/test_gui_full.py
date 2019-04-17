@@ -126,7 +126,7 @@ sg.ChangeLookAndFeel('#F0F8FF')
 #sg.SetOptions (font =('Calibri',12,'bold')) 
 #os.chdir("pcd_files")
 i_vid = r'pcd_files/1547842929.701970000.pcd'
-menu_def = [['&File', ['&Open', '&Save', '&Properties', 'E&xit' ]],
+menu_def = [['&File', ['&Open', 'E&xit' ]],
                 #['&Edit', ['&Paste', ['Special', 'Normal',], 'Undo'],],
                 #['&Toolbar', ['---', 'Command &1', 'Command &2', '---', 'Command &3', 'Command &4']],
                 ['&Help', ['&View Help', '&About']],]
@@ -227,7 +227,7 @@ while True:
         filename = filedialog.askopenfilename(parent=root, initialdir="./pcd_files", title='Please select a directory')
         print(filename)
 
-    if button == 'Open PCD':
+    if button == 'Open PCD' or button == 'Open':
         os.chdir("..")
         print(os.getcwd())
         root = tk.Tk()
@@ -274,12 +274,12 @@ while True:
         
     if button == 'View Help':
             #window.Disappear()
-            sg.Popup('Help  ',' 1. Z - Lock in z-axis ',' 2. K - Lock for cropping ',' 3. Draw Bounding Box ',' 4. C - Save(Enter) ',' X - Lock in x-axis ',' 2. K - Lock for cropping ',' 3. Draw Bounding Box ',' 4. C - Save(Enter) ',' Q - Quit', grab_anywhere=True)
+            sg.Popup('Offline Help',' ','             ----To Create a Crop----',' ','1 .  Press ‘Z’ to enter orthogonal view along Z axis','2 .  Press ‘K’ to lock camera','3 .  Mouse left button + drag to create a selection rectangle','4 .  Press ‘C’ to save the crop','5 .  Choose the ‘app_data’ directory','6 .  Press ‘Q’ to exit the .pcd',' ','             ----General Editing Control----',' ','F - Enter freeview mode','X - Enter orthogonal view along X axis, press again to flip','Y - Enter orthogonal view along Y axis, press again to flip','Z - Enter orthogonal view along Z axis, press again to flip','K - Lock / unlock camera','Q/Esc	Exit window',' ','             ----General Mouse Control----',' ','Left button + drag  ->  Rotate','Ctrl + left button + drag  -> Translate','Wheel button + drag -> Translate','Shift + left button + drag -> Roll','Wheel -> Zoom in/out',' ', grab_anywhere=True)
             #window.Reappear()
             
     if button == 'About':
             #window.Disappear()
-            sg.Popup('About this program','Version 1.0', 'PySimpleGUI rocks...', grab_anywhere=True)
+            sg.Popup('About this program','Version 2.0', 'You can annotate 3D to 2D .Not tomorrow, definitely not yesterday but today.', grab_anywhere=True)
             #window.Reappear()
     """
     if button is not sg.TIMEOUT_KEY:
