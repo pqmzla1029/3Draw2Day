@@ -295,7 +295,7 @@ while True:
         break
 
     try:
-        if global_frame==0
+        if global_frame==0:
             os.chdir("..")
             #print(os.getcwd())
             #amp = int(value['_spin_'])
