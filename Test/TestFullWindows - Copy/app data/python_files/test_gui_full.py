@@ -132,12 +132,13 @@ menu_def = [['&File', ['&Open', 'E&xit' ]],
                 ['&Help', ['&View Help', '&About']],]
 
 column1 = [[sg.Text('Camera Display', font = ('Calibri', 18, 'bold'), background_color='#F0F8FF', pad=(250, 15))],
-          [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')],#,
-          [sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color='#F0F8FF', pad=(250, 15)),sg.ReadButton('Redraw Plot')]
+          [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')]#,
+          #[sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color='#F0F8FF', pad=(250, 15)),sg.ReadButton('Redraw Plot')]
             #sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
            #[sg.Text('_'  * 40,background_color='#F0F8FF')]
            ]
-          
+col_listbox = [[sg.Listbox(values=placeholder_array, change_submits=True, size=(28, len(placeholder_array)), key='func')],
+               [sg.T(' ' * 12, background_color='#F0F8FF'), sg.Exit(size=(5, 2))]]          
 dirname="Executable Requirements/Logo/pencil-icon.png"
 #pathname = os.path.join(dirname ,'3Draw2Day.png') 
 column2=[
@@ -166,15 +167,15 @@ column3 = [
 
 #column4=[[sg.Column(column2, background_color='#F0F8FF')],
 #         [sg.Column(column3, background_color='#F0F8FF')]]
-column4=[[sg.Column(column1, background_color='#F0F8FF')],
-         [sg.Column(column3, background_color='#F0F8FF')]]
+column4=[[sg.Column(column2, background_color='#F0F8FF')],
+         [sg.Column(col_listbox, background_color='#F0F8FF')]]
 #add  file name for image
   
 layout = [
     
     [sg.Menu(menu_def, tearoff=False, pad=(20,1))],
     #[sg.Text('3D Annotation Tool', size=(30, 1), font=("Helvetica", 25)),sg.Column(column1, background_color='#d3dfda')],      
-    [sg.Column(column2, background_color='#F0F8FF',),sg.Column(column1, background_color='#F0F8FF')],
+    [sg.Column(column4, background_color='#F0F8FF',),sg.Column(column1, background_color='#F0F8FF')],
     #[sg.InputCombo(('PCD to Image', 'Image to PCD'), size=(20, 3))],     
     #[sg.Text('Choose A PCD to Annotate', size=(35, 1))],#sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
     #[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
@@ -184,7 +185,8 @@ layout = [
 ]
 dirname="Executable Requirements/Logo/pencil-icon.ico"
 #window = sg.Window('Mobile Robotics', default_element_size=(40, 1)).Layout(layout)
-window = sg.Window('3Draw2Day', force_toplevel = True,icon=dirname, return_keyboard_events=True, use_default_focus=True).Layout(layout).Finalize()
+window = sg.Window('3Draw2Day', force_toplevel = True,icon=dirname, return_keyboard_events=True, use_default_focus=True, grab_anywhere=False).Layout(layout).Finalize()
+window.Finalize()
 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 #button, values = window.Read()
 #sg.Popup(button, values)
@@ -204,7 +206,7 @@ os.chdir("pcd_files")
 print(os.getcwd())
 
 while True:
-    #print("trial")
+    print("trial")
     amp=5
     button, value = window.Read()#(timeout=0)
     if button == 'Redraw Plot':
@@ -287,5 +289,20 @@ while True:
     if button is not sg.TIMEOUT_KEY:
         print("wow")
     """   
-    if button is None:   
+    if button is None or button is 'Exit':   
         break
+
+    try:
+        os.chdir("..")
+        #print(os.getcwd())
+        #amp = int(value['_spin_'])
+        
+        #PCD-ImageMatches
+        function = value['func'][0]
+        print(function)
+        fig=set_plot(amp,function)
+        fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+        #os.chdir(currentloc)
+        os.chdir("pcd_files")
+    except:
+        pass
