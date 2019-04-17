@@ -61,7 +61,7 @@ def set_plot(amp, function):
 
     # Create figure and axes
     fig,ax = plt.subplots(1,figsize=(7.5,6))#,figsize=(20,10))
-
+    #fig,ax = plt.subplots(1,figsize=(10,8))#,figsize=(10,8))
     # Display the image
     ax.imshow(im)
     global figure_w, figure_h
@@ -267,9 +267,11 @@ while True:
                 ctif.main(function,annotationname)
                 print("Done 3")
                 
-                set_plot(amp,function)
+                fig=set_plot(amp,function)
                 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
-	
+                #function = value['_function_']
+                #fig=set_plot(amp,function)
+                #fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
         os.chdir("pcd_files")
         
     if button == 'View Help':
