@@ -6,7 +6,6 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasAgg
 import matplotlib.backends.tkagg as tkagg
 import numpy as np
-import tkinter as tk
 import os
 import open3d as op3
 import matplotlib.cm as cm
@@ -20,9 +19,9 @@ from tkinter import filedialog
 import tkinter as tk
 
 #global fig
-#os.chdir("..")
-#os.chdir("..")
+os.chdir("..")
 print(os.getcwd())
+logodirname="Executable Requirements/Logo/pencil-icon.png"
 global_frame=0
 
 def draw_figure(canvas, figure, loc = (0,0)):
@@ -39,13 +38,7 @@ def draw_figure(canvas, figure, loc = (0,0)):
 
 #------------------------------------------------------------------------------------------
 
-#fig = plt.figure()
-#ax = fig.add_subplot(111)
-#x-values
-#x = np.linspace(-np.pi*2, np.pi*2, 100)
-#y-values
-#y = np.sin(x)
-amp=5
+
 df=pd.read_csv('working_data/links/PCD-ImageMatches.txt', sep=",", header=None)
 array_images=df[1]
 size_of_array=array_images.shape[0]
@@ -55,7 +48,7 @@ for i in range(size_of_array):
     placeholder_array[i]=array_images[i].replace('.jpg', '')
 
 print(placeholder_array)
-def set_plot(amp, function):
+def set_plot( function):
     print(os.getcwd())
     im = np.array(Image.open('image_files/'+function+'.jpg'), dtype=np.uint8)
 
@@ -68,7 +61,6 @@ def set_plot(amp, function):
     exists = os.path.isfile("working_data/bounding_data/2D/"+function+".txt")
     if exists:
         x = np.loadtxt("working_data/bounding_data/2D/"+function+".txt", skiprows=0, usecols = (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
-        #color_array=["blue","red","green","cyan","orange","pink"]
         size_of_array=x.shape[0]
         a = np.zeros([2,16])
         color_array = cm.rainbow(np.linspace(0, 1, size_of_array))
@@ -77,10 +69,7 @@ def set_plot(amp, function):
         else:
             a[0] = x
             size_of_array = 1
-        #for i in range(10):
-        #	color_array.append('%06X' % randint(0, 0xFFFFFF))
-        #len_a=a.shape
-        #print(len_a[0])
+        
         for index_item in range(0,size_of_array):
                 x_number_values= np.zeros(5)
                 y_number_values= np.zeros(5)
@@ -114,17 +103,16 @@ def set_plot(amp, function):
     figure_x, figure_y, figure_w, figure_h = fig.bbox.bounds
     return fig
 
-amp = 1
+
 function=placeholder_array[0]
-fig=set_plot(amp, function)
+fig=set_plot(function)
 #------------------------------------------------------------------------------------------
-bcolor = ('#F0F8FF', '#F0F8FF')
+bcolor = '#F0F8FF'
 wcolor = ('#F0F8FF', '#F0F8FF')
 #sg.ChangeLookAndFeel('GreenTan')
-sg.ChangeLookAndFeel('#F0F8FF')
+sg.ChangeLookAndFeel(bcolor)
 #sg.ChangeLookAndFeel('SandyBeach')
-#sg.SetOptions (font =('Calibri',12,'bold')) 
-#os.chdir("pcd_files")
+#sg.SetOptions (font =('Calibri',12,'bold'))
 i_vid = r'pcd_files/1547842929.701970000.pcd'
 menu_def = [['&File', ['&Open', 'E&xit' ]],
                 #['&Edit', ['&Paste', ['Special', 'Normal',], 'Undo'],],
@@ -133,59 +121,65 @@ menu_def = [['&File', ['&Open', 'E&xit' ]],
 
 column1 = [[sg.Text('Camera Display', font = ('Calibri', 18, 'bold'), background_color='#F0F8FF', pad=(250, 15))],
           [sg.Canvas(size = (figure_w, figure_h), key = '_canvas_')]#,
-          #[sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color='#F0F8FF', pad=(250, 15)),sg.ReadButton('Redraw Plot')]
-            #sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
-           #[sg.Text('_'  * 40,background_color='#F0F8FF')]
+          
            ]
-col_listbox = [[sg.Listbox(values=placeholder_array, change_submits=True, size=(28, len(placeholder_array)), key='func')],
-               [sg.T(' ' * 12, background_color='#F0F8FF'), sg.Exit(size=(5, 2))]]          
-dirname="Executable Requirements/Logo/pencil-icon.png"
-#pathname = os.path.join(dirname ,'3Draw2Day.png') 
+
 column2=[
-    [sg.Image(dirname,size=(60,60), background_color='#F0F8FF'),sg.Text('       3Draw2Day       ', background_color='#F0F8FF', font = ('Calibri', 18, 'bold'))],
-    [sg.Text('_'  * 40, background_color='#F0F8FF')],
-    #[sg.Text('_'  * 40, background_color='#F0F8FF')],
-    [sg.Text('Select type of object to annotate :', background_color='#F0F8FF', font = ('Calibri', 14, 'bold'))],        
+    [sg.Image(logodirname,size=(60,60), background_color=bcolor),sg.Text('       3Draw2Day       ', background_color=bcolor, font = ('Calibri', 18, 'bold'))],
+    [sg.Text('_'  * 40, background_color=bcolor)],
+    [sg.Text('Select type of object to annotate :', background_color=bcolor, font = ('Calibri', 14, 'bold'))],        
+    [sg.InputCombo(['car', 'bike', 'truck','person'], size = (8, 4), key = '_annoname_')],      
+    [sg.ReadButton('Open PCD')],
+    [sg.Text('_'  * 40, background_color=bcolor)]
+    ]
+
+column3 = [
+           [sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color=bcolor, pad=(250, 15)),sg.ReadButton('Redraw Plot')],
+           [sg.Text('_'  * 40,background_color=bcolor)]
+           ]
+
+column4 = [[sg.Listbox(values=placeholder_array, change_submits=True, size=(28, len(placeholder_array)), key='func')],
+               [sg.T(' ' * 12, background_color=bcolor), sg.Exit(size=(5, 2))]]          
+
+
+extracolumn=[
     #[sg.Listbox(values=('crop_file1', 'crop_file2', 'crop_file3'), size=(30, 3))],     
     #[sg.Spin(values=('No Comment', 'Comment'), initial_value='Select')],
     #[sg.Multiline(default_text='Enter Comments Here', size=(35, 3), key = '_comment_'),sg.Submit()],
-    [sg.InputCombo(['car', 'bike', 'truck','person'], size = (8, 4), key = '_annoname_')],      
     #[sg.ReadButton('Meh')],
     #[sg.Text('_'  * 40)],
     #[sg.Text('File'), sg.In(i_vid,size=(30,1), key='input')],#sg.ReadButton('_filebrowse_')],
     #[sg.Button('Exit', image_data=image_file_to_bytes(orange64, (100,50)), font='Any 15', pad=(0,0), key='Open PCD'),],
-    [sg.ReadButton('Open PCD')],
-    [sg.Text('_'  * 40, background_color='#F0F8FF')]
+    #[sg.Spin([sz for sz in range (1,5)], initial_value =1, size = (2,1), key = '_spin_'),
+    #sg.Text('Amplitude', size = (10, 1), font = ('Calibri', 12, 'bold'))],
+    #[sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color=bcolor, pad=(250, 15)),sg.ReadButton('Redraw Plot')],
+    #sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
+    #[sg.Text('_'  * 40,background_color=bcolor)],
+    #[sg.InputCombo(('PCD to Image', 'Image to PCD'), size=(20, 3))],     
+    #[sg.Text('Choose A PCD to Annotate', size=(35, 1))],#sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
+    #[sg.Text('3D Annotation Tool', size=(30, 1), font=("Helvetica", 25)),sg.Column(column1, background_color='#d3dfda')],
+    #[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
+    #sg.InputText('Default Folder'), sg.FolderBrowse()],      
+    #[sg.Submit(), sg.Cancel()]
     ]
 
-column3 = [
-           #[sg.Spin([sz for sz in range (1,5)], initial_value =1, size = (2,1), key = '_spin_'),
-            #sg.Text('Amplitude', size = (10, 1), font = ('Calibri', 12, 'bold'))],
-           [sg.InputCombo(placeholder_array, size = (10, 4), key = '_function_', background_color='#F0F8FF', pad=(250, 15)),sg.ReadButton('Redraw Plot')],
-           [sg.Text('_'  * 40,background_color='#F0F8FF')]
-           ]
+#column5=[[sg.Column(column2, background_color=bcolor)],[sg.Column(column3, background_color=bcolor)]]
+column5=[[sg.Column(column2, background_color=bcolor)],
+         [sg.Column(column4, background_color=bcolor)]]
 
-#column4=[[sg.Column(column2, background_color='#F0F8FF')],
-#         [sg.Column(column3, background_color='#F0F8FF')]]
-column4=[[sg.Column(column2, background_color='#F0F8FF')],
-         [sg.Column(col_listbox, background_color='#F0F8FF')]]
-#add  file name for image
   
 layout = [
     
     [sg.Menu(menu_def, tearoff=False, pad=(20,1))],
-    #[sg.Text('3D Annotation Tool', size=(30, 1), font=("Helvetica", 25)),sg.Column(column1, background_color='#d3dfda')],      
-    [sg.Column(column4, background_color='#F0F8FF',),sg.Column(column1, background_color='#F0F8FF')],
-    #[sg.InputCombo(('PCD to Image', 'Image to PCD'), size=(20, 3))],     
-    #[sg.Text('Choose A PCD to Annotate', size=(35, 1))],#sg.Text('Help  \n 1. Z - Lock in z-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n X - Lock in x-axis \n 2. K - Lock for cropping \n 3. Draw Bounding Box \n 4. C - Save(Enter) \n Q - Quit')],                  
-    #[sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),      
-     #sg.InputText('Default Folder'), sg.FolderBrowse()],      
-    #[sg.Submit(), sg.Cancel()],
+    [sg.Column(column5, background_color=bcolor,),sg.Column(column1, background_color=bcolor)],
+    
     [sg.Text('Status Bar', relief=sg.RELIEF_SUNKEN, size=(55,1),  pad=(0,3),key='_status_')]
 ]
-dirname="Executable Requirements/Logo/pencil-icon.ico"
+
+
+icondirname="Executable Requirements/Logo/pencil-icon.ico"
 #window = sg.Window('Mobile Robotics', default_element_size=(40, 1)).Layout(layout)
-window = sg.Window('3Draw2Day', force_toplevel = True,icon=dirname, return_keyboard_events=True, use_default_focus=True, grab_anywhere=False).Layout(layout).Finalize()
+window = sg.Window('3Draw2Day', force_toplevel = True,icon=icondirname, return_keyboard_events=True, use_default_focus=True, grab_anywhere=False).Layout(layout).Finalize()
 window.Finalize()
 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
 #button, values = window.Read()
@@ -207,8 +201,7 @@ print(os.getcwd())
 
 while True:
     global_frame=0
-    print("trial")
-    amp=5
+    #print("trial")
     button, value = window.Read()#(timeout=0)
     if button == 'Redraw Plot':
         print(os.getcwd())
@@ -219,7 +212,7 @@ while True:
         
         #PCD-ImageMatches
         function = value['_function_']
-        fig=set_plot(amp,function)
+        fig=set_plot(function)
         fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
         #os.chdir(currentloc)
         os.chdir("pcd_files")
@@ -258,25 +251,24 @@ while True:
             load_view_point(pcd,destinationf)
             exists = os.path.isfile("cropped_1.ply")
             if exists:
-                #op3.draw_geometries_with_editing([pcd])
                 
                 print("Done cutting")
                 annotationname = value['_annoname_'].strip()
                 
-                cpd.main(filename)
+                cpd.main(filename,annotationname)
                 print("Done 1")
                 jsr.main(filename,annotationname)
                 print("Done 2")
                 ctif.main(function,annotationname)
                 print("Done 3")
                 
-                fig=set_plot(amp,function)
+                fig=set_plot(function)
                 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
                 global_frame=1
-                #function = value['_function_']
-                #fig=set_plot(amp,function)
-                #fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+                
         os.chdir("pcd_files")
+
+    
         
     if button == 'View Help':
             #window.Disappear()
@@ -291,21 +283,22 @@ while True:
     if button is not sg.TIMEOUT_KEY:
         print("wow")
     """   
-    if button is None or button is 'Exit':   
+    if button is None or button is 'Exit':
+        window.Close()
         break
 
     try:
         if global_frame==0:
             os.chdir("..")
-            #print(os.getcwd())
+            
             #amp = int(value['_spin_'])
             
             #PCD-ImageMatches
             function = value['func'][0]
             print(function)
-            fig=set_plot(amp,function)
+            fig=set_plot(function)
             fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
-            #os.chdir(currentloc)
+            
             os.chdir("pcd_files")
     except:
         pass

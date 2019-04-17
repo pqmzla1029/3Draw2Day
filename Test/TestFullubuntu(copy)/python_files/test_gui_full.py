@@ -34,12 +34,6 @@ def draw_figure(canvas, figure, loc = (0,0)):
 
 #------------------------------------------------------------------------------------------
 
-#fig = plt.figure()
-#ax = fig.add_subplot(111)
-#x-values
-#x = np.linspace(-np.pi*2, np.pi*2, 100)
-#y-values
-#y = np.sin(x)
 
 def set_plot(amp, function):
     im = np.array(Image.open('image_files/'+function+'.jpg'), dtype=np.uint8)

@@ -137,8 +137,8 @@ column1 = [[sg.Text('Camera Display', font = ('Calibri', 18, 'bold'), background
             #sg.Text('Function', size = (10, 1),font = ('Calibri', 12, 'bold'))],
            #[sg.Text('_'  * 40,background_color='#F0F8FF')]
            ]
-col_listbox = [[sg.Listbox(values=placeholder_array, change_submits=True, size=(28, len(placeholder_array)), key='func')],
-               [sg.T(' ' * 12, background_color='#F0F8FF'), sg.Exit(size=(5, 2))]]          
+col_listbox = [[sg.Listbox(values=placeholder_array, change_submits=True, size=(28, len(placeholder_array)), key='func')]]#,
+               #[sg.T(' ' * 12, background_color='#F0F8FF'), sg.Exit(size=(5, 2))]]          
 dirname="Executable Requirements/Logo/pencil-icon.png"
 #pathname = os.path.join(dirname ,'3Draw2Day.png') 
 column2=[
@@ -291,7 +291,7 @@ while True:
     if button is not sg.TIMEOUT_KEY:
         print("wow")
     """   
-    if button is None or button is 'Exit':   
+    if button is None:# or button is 'Exit':   
         break
 
     try:
