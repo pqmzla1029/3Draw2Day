@@ -23,7 +23,7 @@ import tkinter as tk
 #os.chdir("..")
 os.chdir("..")
 print(os.getcwd())
-
+global_frame=0
 
 def draw_figure(canvas, figure, loc = (0,0)):
 
@@ -206,6 +206,7 @@ os.chdir("pcd_files")
 print(os.getcwd())
 
 while True:
+    global_frame=0
     print("trial")
     amp=5
     button, value = window.Read()#(timeout=0)
@@ -271,6 +272,7 @@ while True:
                 
                 fig=set_plot(amp,function)
                 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+                global_frame=1
                 #function = value['_function_']
                 #fig=set_plot(amp,function)
                 #fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
@@ -293,16 +295,17 @@ while True:
         break
 
     try:
-        os.chdir("..")
-        #print(os.getcwd())
-        #amp = int(value['_spin_'])
-        
-        #PCD-ImageMatches
-        function = value['func'][0]
-        print(function)
-        fig=set_plot(amp,function)
-        fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
-        #os.chdir(currentloc)
-        os.chdir("pcd_files")
+        if global_frame==0
+            os.chdir("..")
+            #print(os.getcwd())
+            #amp = int(value['_spin_'])
+            
+            #PCD-ImageMatches
+            function = value['func'][0]
+            print(function)
+            fig=set_plot(amp,function)
+            fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
+            #os.chdir(currentloc)
+            os.chdir("pcd_files")
     except:
         pass
