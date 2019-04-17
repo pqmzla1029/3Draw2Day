@@ -5,7 +5,7 @@
 
 <Requirements>
 Python 3.5.x above (Tested)
-You may install the library requirements by running setup.bat in Executable Requirements
+You may install the library requirements by running setup.bat in Executable Requirements after ensuring that pip and python are installed
 
 <Working>
 
