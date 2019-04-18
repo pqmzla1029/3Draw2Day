@@ -109,8 +109,8 @@ def set_plot( function):
 #Uncomment Following Line to Begin Debug Process
 #os.chdir("..")
 print(os.getcwd())
-logodirname="Executable Requirements/Logo/Pencil-icon.png"
-icondirname="Executable Requirements/Logo/Pencil-icon.ico"
+logodirname="Executable Requirements/Logo/pencil-icon.png"
+icondirname="Executable Requirements/Logo/pencil-icon.ico"
 global_frame=0
 
 df=pd.read_csv('working_data/links/PCD-ImageMatches.txt', sep=",", header=None)
@@ -238,12 +238,10 @@ while True:
         root = tk.Tk()
         root.withdraw()
         directoryname = filedialog.askopenfilename(parent=root, initialdir="./pcd_files", title='Please select a directory')
-        filename=directoryname
-        
+        filename=ntpath.basename(directoryname)
+        #print(filename)
         #print("Test Begin")
-        #if(filename!=""):
-        try:
-            filename=ntpath.basename(directoryname)
+        if(filename!=""):
             #directoryname = value['input']
             #filename=filename.replace('.pcd', '')
             #print(filename)
@@ -277,8 +275,6 @@ while True:
                 fig=set_plot(function)
                 fig_photo = draw_figure(window.FindElement('_canvas_').TKCanvas, fig)
                 global_frame=1
-        except:
-            pass
         #print("Test End")        
         os.chdir("pcd_files")
         print(os.getcwd())

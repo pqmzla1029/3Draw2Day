@@ -29,7 +29,7 @@ def convert_to_image(filename,annotation_name):
 
 	#lengthimg=
 	x=np.around(x,decimals=3)
-	f=open("working_data/bounding_data/2D/"+str(filename)+".txt",'a+')
+	f=open("working_data/bounding_data/"+str(filename)+".txt",'a+')
 	#for line in x:
 	#np.savetxt(f, line, fmt='%.2f')
 	f.write(annotation_name)

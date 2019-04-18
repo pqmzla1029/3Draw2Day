@@ -6,8 +6,8 @@ from open3d import *
 #os.chdir("..")
 print(os.getcwd())
 
-def get_values(directoryename,annotation_name):
-	with open("working_data/json_crops/"+directoryename+"/"+annotation_name+".json", "r") as wow:
+def get_values(directoryename):
+	with open("working_data/json_crops/"+directoryename+"/cropped_1.json", "r") as wow:
 	    json_string = json.load(wow)
 	#print(json_string["bounding_polygon"])
 
@@ -25,7 +25,7 @@ def get_values(directoryename,annotation_name):
 	random_array=json_string["bounding_polygon"]
 	myarray3 = np.asarray(random_array)
 	#print(myarray2[:,2])
-	pcd = read_point_cloud("working_data/ply_crops/"+annotation_name+".ply")
+	pcd = read_point_cloud("working_data/ply_crops/cropped_1.ply")
 
 	maxval=pcd.get_max_bound()
 	minval=pcd.get_min_bound()
@@ -73,7 +73,7 @@ def write_values_json(filename,myarray1,myarray2,myarray3,annotation_name):
 
 def main(filename,annotation_name):
 	directoryname=filename
-	myarray1,myarray2,myarray3=get_values(directoryname,annotation_name)
+	myarray1,myarray2,myarray3=get_values(directoryname)
 	write_values_json(filename,myarray1,myarray2,myarray3,annotation_name)
 	write_values_convert(myarray1,myarray2,myarray3)
 

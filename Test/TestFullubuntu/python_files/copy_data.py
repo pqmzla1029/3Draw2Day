@@ -13,11 +13,9 @@ def createDirectory(directory):
 	except FileExistsError:
 	    print("Directory " , dirName ,  " already exists")
 
-	
-
-def moveFiles(directory,annotationname):
+def moveFiles(directory):
         src1="cropped_1.json"
-        dst1="working_data/json_crops/"+directory+"/"+annotationname+".json"
+        dst1="working_data/json_crops/"+directory+"/cropped_1.json"
         #src2="cropped_2.json"
         #dst2="working_data/json_crops/cropped_2.json"
         
@@ -25,16 +23,16 @@ def moveFiles(directory,annotationname):
         #shutil.move(src2,dst2)
 
         src1="cropped_1.ply"
-        dst1="working_data/ply_crops/"+annotationname+".ply"
+        dst1="working_data/ply_crops/cropped_1.ply"
         #src2="cropped_2.ply"
         #dst2="working_data/ply_crops/cropped_2.ply"
         
         shutil.move(src1,dst1)
         #shutil.move(src2,dst2)
 
-def main(filename,annotationname):
+def main(filename):
 	directory=filename
 	createDirectory(directory)
-	moveFiles(directory,annotationname)
+	moveFiles(directory)
 
 #main()
